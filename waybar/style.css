@@ -1,0 +1,31 @@
+* {
+  font-family: "Hack", monospace;
+}
+
+window#waybar {
+  background: none;
+}
+button,
+button.active,
+button.focused {
+  margin-right: 5px;
+  padding: 0;
+  color: rgba(35, 6, 70, 0.5);
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+#cpu,
+#memory,
+#disk,
+#custom-power,
+#wireplumber {
+  padding: 0 15px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  background-color: rgba(35, 6, 70, 0.5);
+  border: none;
+}
