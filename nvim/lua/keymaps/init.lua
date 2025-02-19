@@ -51,6 +51,9 @@ keymap("n", "<leader>g", ":Telescope live_grep<cr>", opts)
 -- Oil
 keymap('n', '-', ':edit .<cr>', opts)
 
+keymap('n', 'de', 'd0', opts)
+keymap('n', 'dr', 'd$', opts)
+
 -- copy and pasting
 -- yw to copy word
 -- yy to copy line
