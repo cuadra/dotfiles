@@ -44,9 +44,15 @@ keymap("x", "<S-k>", ":m '<-2<CR>gv=gv", opts)
 keymap("n", "<leader>a", ":%s/", opts)
 
 -- Telescope
-keymap("n", "<leader>f", ":Telescope find_files<cr>", opts)
-keymap("n", "<leader>g", ":Telescope live_grep<cr>", opts)
+keymap("n", "<leader>f", ":FzfLua files<cr>", opts)
+-- keymap("n", "<leader>f", ":Telescope find_files<cr>", opts)
+keymap("n", "<leader>g", ":FzfLua grep<cr>", opts)
+keymap("n", "<leader>G", ":FzfLua git_branches<cr>", opts)
+-- keymap("n", "<leader>g", ":Telescope live_grep<cr>", opts)
+keymap("n", "<leader>b", ":FzfLua buffers<cr>", opts) -- List all buffers
 
+-- Quick Quit
+keymap("n", "<leader>q", ":q<cr>", opts)
 
 -- Oil
 keymap('n', '-', ':edit .<cr>', opts)

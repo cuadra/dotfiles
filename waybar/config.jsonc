@@ -21,11 +21,11 @@
     "wireplumber",
     "cpu",
     "disk",
-    "memory"
-    //"temperature",
+    "memory",
+    //"temperature"
     //"backlight"
     //"wireplumber",
-    //"clock"
+    "clock"
     
     //"custom/separator",
     //"group/custom-group",

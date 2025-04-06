@@ -62,7 +62,7 @@ local plugins = {
     -- OPTIONAL:
     --   `nvim-notify` is only needed, if you want to use the notification view.
     --   If not available, we use `mini` as the fallback
-    "rcarriga/nvim-notify",
+    --   "rcarriga/nvim-notify",
     }
 },
   {
@@ -80,12 +80,43 @@ local plugins = {
 },
 { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 {
-  'nvim-telescope/telescope.nvim', tag = '0.1.8',
-  dependencies = { 'nvim-lua/plenary.nvim' }
+	'nvim-telescope/telescope.nvim', tag = '0.1.8',
+	dependencies = { 'nvim-lua/plenary.nvim' }
 },
 {
 'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
+},
+{
+  "jackMort/ChatGPT.nvim",
+  event = "VeryLazy",
+  config = function()
+    require("chatgpt").setup()
+  end,
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+    "nvim-lua/plenary.nvim",
+    "folke/noice.nvim", -- Optional dependency for chat history
+    "nvim-telescope/telescope.nvim", -- Optional dependency for searching conversations
+  }
+},
+{
+  "folke/snacks.nvim",
+  priority = 1000,
+  lazy = false,
+  ---@type snacks.config
+  opts = {
+    indent = { enabled = true},
+    notifier = {
+      enabled = true, -- enable notifications
+      timeout = 1000, -- duration in ms
+    },
+  }
+},
+{
+  "ibhagwan/fzf-lua",
+  dependencies = { "nvim-tree/nvim-web-devicons"},
+  opts = {}
 }
 }
 local opts = {}
@@ -103,7 +134,8 @@ lspconfig.ts_ls.setup({})
 local builtin = require("telescope.builtin")
 --vim.keymap.set('n', '<C-f', builtin.find_files, {})
 --vim.keymap.set('n', '<C-g>', builtin.live_grep, {})
-require("catppuccin").setup({transparent_background = false})
+require("catppuccin").setup({transparent_background = true})
+
 
 vim.cmd.colorscheme "catppuccin"
 --vim.cmd [[
@@ -112,3 +144,13 @@ vim.cmd.colorscheme "catppuccin"
   --highlight Normal ctermbg=none
   --highlight NonText ctermbg=none
 --]]
+
+local home = vim.fn.expand("~")
+require("chatgpt").setup({
+      api_key_cmd = "gpg --decrypt " .. home .. "/.secrets/cgpt.txt.gpg",
+      welcome_message = "What are we working on today?",
+      chat_input_placeholder = "Let's get started...",
+      max_response_length = 500, -- maximum response length
+});
+
+require("fzf-lua").setup({'default'})

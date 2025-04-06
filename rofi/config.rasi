@@ -14,20 +14,21 @@
     wbg-color: #000000CC;
     w-border: 2px solid;
     w-border-color: #FFFFFFFF;
-    w-padding: 12px;
+    w-padding: 24px;
 
 }
 
 configuration {
     modi: "drun";
-    show-icons: false;
+    show-icons: true;
     display-drun: " ";
+    drun-display-format: "{icon} {name}";
 }
 
 listview {
     columns: 1;
-    lines:1 ;
-    fixed-height: true;
+    lines:1;
+    fixed-height: false;
     fixed-columns: false;
     cycle: false;
     scrollbar: false;
@@ -53,16 +54,16 @@ inputbar {
 }
 
 entry {
-    placeholder: "Search";
+    placeholder: "";
     text-color: @fg-color;
-    placeholder-color: rgba(0,0,0,30%);
+    placeholder-color: rgba(255,255,255,30%);
 }
 
 mainbox {
     spacing: @g-spacing;
     margin: @g-margin;
     padding: @g-padding;
-    children: ["inputbar", "listview", "message"];
+    children: ["inputbar", "listview"];
 }
 
 element {

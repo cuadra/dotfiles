@@ -21,6 +21,7 @@ button.focused {
 #memory,
 #disk,
 #custom-power,
+#clock,
 #wireplumber {
   padding: 0 15px;
   font-weight: 700;
