@@ -60,6 +60,23 @@ keymap('n', '-', ':edit .<cr>', opts)
 keymap('n', 'de', 'd0', opts)
 keymap('n', 'dr', 'd$', opts)
 
+-- keymap('n', '<leader>x', ':cope<cr>', opts) 
+-- keymap('n', '<leader>xx', ':ccl<cr>', opts) 
+-- keymap('n', '<leader>x', ':lua vim.diagnostic.setqflist()<cr>', opts) 
+
+-- keymap('n', '<leader>j', '<C-w>j', opts)
+-- keymap('n', '<leader>k', '<C-w>k', opts)
+
+-- keymap('n', '<leader>e', ':lua vim.diagnostic.open_float()<cr>', opts)
+keymap('n', 'w', ':lua vim.diagnostic.goto_prev()<cr>', opts)
+keymap('n', 't', ':lua vim.diagnostic.goto_next()<cr>', opts)
+-- vim.api.nvim_create_autocmd('DiagnosticChanged', {
+  -- group = vim.api.nvim_create_augroup('diagnostic', { clear = true }),
+  -- callback = function()
+    -- vim.diagnostic.setqflist()
+  -- end,
+-- })
+
 -- copy and pasting
 -- yw to copy word
 -- yy to copy line

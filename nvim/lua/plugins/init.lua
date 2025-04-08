@@ -124,7 +124,7 @@ local opts = {}
 require('lazy').setup(plugins, opts)
 require('mason').setup()
 require('mason-lspconfig').setup({
-  ensure_installed={'ts_ls'}
+  -- ensure_installed={'ts_ls'}
 })
 require("lualine").setup()
 
@@ -144,6 +144,12 @@ vim.cmd.colorscheme "catppuccin"
   --highlight Normal ctermbg=none
   --highlight NonText ctermbg=none
 --]]
+vim.diagnostic.config({
+  float = {
+    border = "rounded"
+  }
+})
+
 
 local home = vim.fn.expand("~")
 require("chatgpt").setup({
