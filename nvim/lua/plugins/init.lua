@@ -22,12 +22,13 @@ local blink = require("plugins.blink")
 local oil = require("plugins.oil")
 local telescope = require("plugins.telescope")
 local lualine = require("plugins.lualine")
-local chatgpt = require("plugins.chatgpt")
+-- local chatgpt = require("plugins.chatgpt")
 local snacks = require("plugins.snacks")
 local fzf = require("plugins.fzf")
 local copilot = require("plugins.copilot")
-
+local avante = require("plugins.avante")
 local plugins = {
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	conform,
 	luarocks,
 	noice,
@@ -36,11 +37,11 @@ local plugins = {
 	oil,
 	telescope,
 	lualine,
-	chatgpt,
+	-- chatgpt,
 	snacks,
 	fzf,
 	copilot,
-	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+	avante,
 }
 --require('oil').setup()
 
@@ -49,8 +50,40 @@ require("mason").setup()
 require("mason-lspconfig").setup({
 	-- ensure_installed={'ts_ls'}
 })
+
+local mode_map = {
+	["NORMAL"] = "N",
+	["O-PENDING"] = "N?",
+	["INSERT"] = "I",
+	["VISUAL"] = "V",
+	["V-BLOCK"] = "VB",
+	["V-LINE"] = "VL",
+	["V-REPLACE"] = "VR",
+	["REPLACE"] = "R",
+	["COMMAND"] = "!",
+	["SHELL"] = "SH",
+	["TERMINAL"] = "T",
+	["EX"] = "X",
+	["S-BLOCK"] = "SB",
+	["S-LINE"] = "SL",
+	["SELECT"] = "S",
+	["CONFIRM"] = "Y?",
+	["MORE"] = "M",
+}
 require("lualine").setup({
-	-- options = { theme = "horizon" },
+	sections = {
+		lualine_a = { {
+			"mode",
+			fmt = function(s)
+				return mode_map[s] or s
+			end,
+		} },
+		lualine_b = { "branch" },
+		lualine_c = {},
+		lualine_x = { { "filetype", icon_only = true, icon = { align = "right" } } },
+		lualine_y = { "diagnostics" },
+		lualine_z = { "filename" },
+	},
 })
 
 local lspconfig = require("lspconfig")
@@ -72,13 +105,6 @@ vim.diagnostic.config({
 	float = {
 		border = "rounded",
 	},
-})
-
-require("chatgpt").setup({
-	api_key_cmd = "gpg --decrypt " .. vim.fn.expand("~") .. "/.secrets/cgpt.txt.gpg",
-	welcome_message = "What are we working on today?",
-	chat_input_placeholder = "Let's get started...",
-	max_response_length = 500, -- maximum response length
 })
 
 require("fzf-lua").setup({ "default" })

@@ -102,3 +102,12 @@ keymap("n", "<leader>P", '"+p', opts)
 -- gg to jump to the beginning of the file
 -- G to jump to the end of the file
 -- nP to paste from registers
+
+-- ChatGPT Shortcuts
+-- keymap("n", "<leader>r", ":ChatGPTRun optimize_code<cr>", opts)
+-- keymap("n", "<leader>R", ":ChatGPTRun fix_bugs<cr>", opts)
+-- keymap("n", "<leader>c", ":ChatGPTEditWithInstructions<cr>", opts)
+-- keymap("v", "<leader>c", ":ChatGPTEditWithInstructions<cr>", opts)
+-- keymap("n", "<leader>C", ":ChatGPT<cr>", opts)
+
+-- Avante Shortcuts
