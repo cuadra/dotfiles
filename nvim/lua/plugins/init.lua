@@ -89,6 +89,8 @@ require("lualine").setup({
 local lspconfig = require("lspconfig")
 lspconfig.ts_ls.setup({})
 
+--lspconfig.emmet_language_server.setup({})
+
 local builtin = require("telescope.builtin")
 --vim.keymap.set('n', '<C-f', builtin.find_files, {})
 --vim.keymap.set('n', '<C-g>', builtin.live_grep, {})

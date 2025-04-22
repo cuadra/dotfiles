@@ -110,4 +110,6 @@ keymap("n", "<leader>P", '"+p', opts)
 -- keymap("v", "<leader>c", ":ChatGPTEditWithInstructions<cr>", opts)
 -- keymap("n", "<leader>C", ":ChatGPT<cr>", opts)
 
+-- Clear search highlights
+keymap("n", "<leader>?", ":nohlsearch<cr>", opts)
 -- Avante Shortcuts
