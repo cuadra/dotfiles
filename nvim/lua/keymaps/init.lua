@@ -18,7 +18,6 @@ keymap("n", "<leader>n", ":enew<cr>", opts)
 
 -- Writing and Exiting
 keymap("n", "<leader>s", ":w<cr>", opts)
-keymap("n", "<leader>S", ":w ", opts)
 keymap("n", "<leader>w", ":bd<cr>", opts)
 
 -- Navigating lines
@@ -32,22 +31,13 @@ keymap("v", "l", ">gv^", opts)
 
 -- Move text up and down
 
-keymap("n", "<S-j>", ":m '>+1<CR>gv=gv", opts)
-keymap("n", "<S-k>", ":m '<-2<CR>gv=gv", opts)
 keymap("v", "<S-j>", ":m '>+1<CR>gv=gv", opts)
 keymap("v", "<S-k>", ":m '<-2<CR>gv=gv", opts)
-keymap("x", "<S-j>", ":m '>+1<CR>gv=gv", opts)
-keymap("x", "<S-k>", ":m '<-2<CR>gv=gv", opts)
--- keymap("x", "J", ":m '>+1<CR>gv=gv", opts)
--- keymap("x", "K", ":m '<-2<CR>gv=gv", opts)
 
 -- Find and get ready to replace
 keymap("n", "<leader>a", ":%s/", opts)
 
 -- FzfLua
---
---
---
 --
 keymap("n", "<leader>f", ":FzfLua files<cr>", opts)
 -- keymap("n", "<leader>f", ":Telescope find_files<cr>", opts)
@@ -58,6 +48,7 @@ keymap("n", "<leader>b", ":FzfLua buffers<cr>", opts) -- List all buffers
 
 -- Quick Quit
 keymap("n", "<leader>q", ":q<cr>", opts)
+keymap("n", "<leader>Q", ":q!<cr>", opts)
 
 -- Oil
 -- Start browsing
@@ -92,6 +83,7 @@ keymap("n", "<leader>I", ":lua Snacks.indent.disable()<cr>", opts)
 -- Copy and Pasting with the Clipboard
 keymap("n", "<leader>Y", '"+y', opts)
 keymap("n", "<leader>P", '"+p', opts)
+
 -- copy and pasting
 -- yw to copy word
 -- yy to copy line
@@ -102,3 +94,14 @@ keymap("n", "<leader>P", '"+p', opts)
 -- gg to jump to the beginning of the file
 -- G to jump to the end of the file
 -- nP to paste from registers
+
+-- ChatGPT Shortcuts
+-- keymap("n", "<leader>r", ":ChatGPTRun optimize_code<cr>", opts)
+-- keymap("n", "<leader>R", ":ChatGPTRun fix_bugs<cr>", opts)
+-- keymap("n", "<leader>c", ":ChatGPTEditWithInstructions<cr>", opts)
+-- keymap("v", "<leader>c", ":ChatGPTEditWithInstructions<cr>", opts)
+-- keymap("n", "<leader>C", ":ChatGPT<cr>", opts)
+
+-- Clear search highlights
+keymap("n", "<leader>?", ":nohlsearch<cr>", opts)
+-- Avante Shortcuts
