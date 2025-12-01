@@ -6,7 +6,16 @@ configstore/
 create-next-app-nodejs/
 dconf/
 dolphinrc
-fish/*
+fish/
+fish/fish_variables
+flameshot/
+go/
+google-chrome/
+libreoffice/
+mimeapps.list
+nextjs-nodejs/
+nushell/
+vlc/
 github-copilot/
 google-chrome-for-testing/
 htop/
