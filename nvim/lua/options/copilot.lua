@@ -1,0 +1,2 @@
+-- vim.cmd[[imap <silent><script> <C-A>=copilot#complete()<CR>]]
+-- vim.g.copilot_no_tab_map = true

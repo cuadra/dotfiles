@@ -1,0 +1,61 @@
+2025-12-12T22:45:39 exception: Failed to open "/home/jcuadra/.config/mpd/state": No such file or directory
+2025-12-12T22:45:39 update: added /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-12T22:46:43 exception: Failed to open "/home/jcuadra/.config/mpd/state": No such file or directory
+2025-12-12T22:46:56 exception: Failed to commit /home/jcuadra/.config/mpd/state: File exists
+2025-12-12T22:47:27 mixer: Failed to read mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:49:49 mixer: Failed to read mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:50:09 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:50:10 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T22:50:10 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:50:11 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T22:50:11 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:50:55 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:51:37 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:54:04 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T22:54:04 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T22:57:36 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T22:58:02 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T23:01:35 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T23:01:56 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-12T23:05:28 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-12T23:05:40 output: Failed to open mixer for "My ALSA Device": no such mixer control: PCM
+2025-12-13T08:31:05 exception: Failed to commit /home/jcuadra/.config/mpd/state: File exists
+2025-12-13T08:31:05 exception: Failed to commit /home/jcuadra/.config/mpd/state: File exists
+2025-12-13T08:31:05 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:31:05 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:31:05 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:32:23 mixer: Failed to read mixer for "default detected output": no such mixer control: PCM
+2025-12-13T08:32:42 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:32:42 output: Failed to open mixer for "default detected output": no such mixer control: PCM
+2025-12-13T08:36:30 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:39:21 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:42:52 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T08:46:25 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T17:53:09 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T17:56:42 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T18:00:33 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T18:13:02 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:13:13 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:13:49 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:13:55 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:14:32 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:15:35 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:15:36 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:15:39 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:16:17 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:17:27 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:18:07 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T18:19:55 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:20:13 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:20:19 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:20:42 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:24:15 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:24:18 update: updating /Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3
+2025-12-13T18:27:53 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T19:17:25 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-13T19:28:17 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-15T21:17:41 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-15T21:21:42 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-15T21:26:29 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-15T21:32:02 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"
+2025-12-16T14:45:48 player: played "Skrillex - G2G (Kasger DnB Flip)-yt.savetube.me.mp3"

@@ -1,0 +1,86 @@
+* {
+  font-family: "Jetbrains Mono", monospace;
+}
+
+window#waybar {
+  background: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+button {
+  margin: 0 3px;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.2);
+}
+button.empty {
+  color: rgba(0, 0, 0, 0.1);
+}
+button.focused,
+button:hover,
+button.active {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/*
+button,
+button.active,
+button.focused,
+button:hover {
+  margin: 0 5px;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.2);
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+#workspaces button {
+  margin: 0 5px;
+  padding: 0;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  border: 1px solid white;
+}
+ */
+#workspaces button,
+#workspaces button:hover,
+#workspaces button.active,
+#workspaces button.focused {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+/*
+#workspaces button.empty {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+}
+*/
+#cpu,
+#memory,
+#disk,
+#custom-power,
+#clock,
+#temperature,
+#wireplumber,
+#custom-status,
+#custom-separator {
+  margin: 0;
+  padding: 10px 0;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  background-color: rgba(35, 6, 70, 0.1);
+  background: none;
+  border: none;
+}
+#custom-status {
+  margin-left: 15px;
+}
+#clock {
+  margin-right: 15px;
+}
