@@ -35,7 +35,9 @@
   "group/custom-group": {
     "orientation": "horizontal",
     "modules": [
-      "idle_inhibitor"
+      //"idle_inhibitor"
+      "custom/gputemperature",
+      "custom/nvmeTemperature"
       //"custom/bluetooth",
       //"custom/kdeconnect",
       //"custom/wifi",
@@ -88,15 +90,33 @@
 
   "temperature": {
     // "thermal-zone": 2,
-    // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
     "format-critical": "{temperatureC}°C {icon}",
     "critical-threshold": 80,
     "interval": 2,
-    "format": " {temperatureC:>2}°C",
+    "format": "  {temperatureC:>2}°C",
     "format-icons": ["", "", ""]
     //"on-click": "hyprctl dispatcher togglespecialworkspace monitor"
   },
 
+  "custom/gputemperature": {
+    // "thermal-zone": 2,
+    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+    "format-critical": "{temperaturec}°c {icon}",
+    "critical-threshold": 80,
+    "interval": 2,
+    "format": "  {temperaturec:>2}°c",
+    "format-icons": ["", "", ""]
+  },
+  "custom/nvmeTemperature": {
+    // "thermal-zone": 2,
+    "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+    "format-critical": "{temperatureC}°C {icon}",
+    "critical-threshold": 80,
+    "interval": 2,
+    "format": "  {temperatureC:>2}°C",
+    "format-icons": ["", "", ""]
+  },
   "cpu": {
     "interval": 2,
     "format": " {usage:>2}%",
