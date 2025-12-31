@@ -68,7 +68,8 @@ button:hover {
 #temperature,
 #wireplumber,
 #custom-status,
-#custom-separator {
+#custom-separator,
+#custom-notification {
   margin: 0;
   padding: 10px 0;
   font-weight: 700;
