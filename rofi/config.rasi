@@ -21,26 +21,25 @@
 configuration {
     modi: "drun";
     show-icons: true;
-    display-drun: " ";
+    display-drun: " ";
     drun-display-format: "{icon} {name}";
 }
-
 listview {
-    columns: 4;
+    columns: 1;
     //lines:2;
     fixed-height: false;
     fixed-columns: false;
-    cycle: true;
+    cycle: false;
     scrollbar: false;
     border: none;
-    //require-input: true;
+    require-input: false;
 }
 
 window {
     transparency: "real";
     //width: 10%;
     border-radius: @b-radius;
-    background-color: rgba(42, 121, 181,90%);
+    background-color: rgba(24,25,38,100%);
     border:none;
     padding: 20%;
     fullscreen: true;
@@ -52,22 +51,22 @@ prompt {
 
 inputbar {
     children: ["prompt", "entry"];
-    spacing: 5px;
-    padding: 30px 15px;
+    spacing: 8px;
+    padding: 30px 15px 30px 30px;
     border-radius: @b-radius;
-    background-color: rgba(255,255,255,100%);
+    background-color: rgba(41,44,60,100%);
 }
 
-entry {
-    cursor-color: rgba(0,0,0,10%);
+entry{
+    cursor-color: rgba(255,255,255,0%);
     cursor-width: 2px;
-    placeholder: "";
-    text-color: rgba(42,121,181,100%);
-    placeholder-color: rgba(0,0,0,50%);
+    placeholder: "Search...";
+    text-color: rgba(255,255,255,100%);
+    placeholder-color: rgba(181,191,226,50%);
+    vertical-align: 1;
 }
 
 mainbox {
-    width: 200px;
     spacing: @g-spacing;
     margin: @g-margin;
     padding: @g-padding;
@@ -76,8 +75,7 @@ mainbox {
 
 element {
     spacing: @g-spacing;
-    margin: 7px;
-    
+    margin: 5px 0;
     padding: 30px 15px;
     border: 0px solid;
     border-radius: @b-radius;
@@ -86,21 +84,17 @@ element {
     text-color: @fg-color;
 }
 element-text{
-  vertical-align: 0.5;
+  vertical-align: 1;
   highlight: bold;
-  }
+}
+
 
 element-icon{
-size: 2.5em;
+  size: 0.7em;
 }
-element normal.normal {
-	background-color: rgba(255,255,255,95%);
-	text-color: rgba(0,0,0,50%);
-}
-
-element alternate.normal {
-	background-color: rgba(255,255,255,95%);
-	text-color: rgba(0,0,0, 50%);
+element normal.normal, element alternate.normal {
+	background-color: rgba(36,39,58,100%);
+	text-color: rgba(54,58,79,100%);
 }
 
 element selected.active {
@@ -109,7 +103,7 @@ element selected.active {
 }
 
 element selected.normal {
-	background-color: rgba(0,83,156,70%);
+	background-color: rgba(73,77,100,100%);
 	text-color: rgba(255,255,255,90%);
 }
 
