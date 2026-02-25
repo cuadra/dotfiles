@@ -23,7 +23,7 @@
     //"memory",
     //"disk",
     //"custom/separator",
-    "custom/notification",
+    //"custom/notification",
     "wireplumber",
     //"custom/separator",
     "temperature",
