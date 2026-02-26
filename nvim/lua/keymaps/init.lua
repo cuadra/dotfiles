@@ -58,8 +58,8 @@ keymap("n", "-", ":edit .<cr>", opts)
 -- keymap("n", "dr", "d$", opts)
 
 -- keymap('n', '<leader>x', ':cope<cr>', opts)
--- keymap('n', '<leader>xx', ':ccl<cr>', opts)
--- keymap('n', '<leader>x', ':lua vim.diagnostic.setqflist()<cr>', opts)
+keymap("n", "<leader>xx", ":ccl<cr>", opts)
+keymap("n", "<leader>x", ":lua vim.diagnostic.setqflist()<cr>", opts)
 
 -- keymap('n', '<leader>j', '<C-w>j', opts)
 -- keymap('n', '<leader>k', '<C-w>k', opts)
