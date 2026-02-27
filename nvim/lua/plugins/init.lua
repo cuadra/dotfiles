@@ -26,8 +26,8 @@ local lualine = require("plugins.lualine")
 local snacks = require("plugins.snacks")
 local fzf = require("plugins.fzf")
 local copilot = require("plugins.copilot")
-local avante = require("plugins.avante")
-local neoscroll = require("plugins.neoscroll")
+-- local avante = require("plugins.avante")
+-- local neoscroll = require("plugins.neoscroll")
 local plugins = {
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	conform,
@@ -38,12 +38,12 @@ local plugins = {
 	oil,
 	telescope,
 	lualine,
-	-- chatgpt,
 	snacks,
 	fzf,
 	copilot,
-	avante,
-	neoscroll,
+	-- chatgpt,
+	--avante,
+	--neoscroll,
 }
 --require('oil').setup()
 
@@ -88,8 +88,12 @@ require("lualine").setup({
 	},
 })
 
-local lspconfig = require("lspconfig")
-lspconfig.ts_ls.setup({})
+--local lspconfig = require("lspconfig")
+-- lspconfig.ts_ls.setup({})
+vim.lsp.config("ts_ls", {
+	flags = { debounce_text_changes = 300 },
+})
+vim.lsp.enable({ "ts_ls" })
 
 --lspconfig.emmet_language_server.setup({})
 
