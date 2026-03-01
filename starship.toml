@@ -7,14 +7,14 @@ format = """
 [󰊠 ](fg:pink)\
 [󰊠 ](fg:#ffa500)\
 [󰊠 ](fg:blue)\
-[ ](fg:rosewater)\
+[ ❯ ](fg:rosewater)\
 [ ](fg:text)\
 $directory\
-[](fg:peach)\
+[❯](fg:peach)\
 (\
 $git_branch\
 $git_status\
-[](fg:yellow)\
+[❯](fg:yellow)\
 )\
 (\
 $c\
@@ -27,11 +27,7 @@ $kotlin\
 $haskell\
 $python\
 $conda\
-[](fg:green)\
-)\
-$time\
-(\
-$cmd_duration\
+[❯ ](fg:green)\
 )\
 $line_break\
 $character"""
@@ -152,21 +148,21 @@ ignore_base = false
 
 [time]
 disabled = false
-time_format = "%R"
-style = "fg:sapphire"
-format = '[[   $time ](fg:sapphire)]($style)'
+format = "[ 󰃭  $time]($style) "
+time_format = "%a %b %d • %I:%M %p"
+style = "fg:#9399b2"
 
 [line_break]
 disabled = true
 
 [character]
 disabled = false
-success_symbol = '[❯](bold fg:green)'
-error_symbol = '[❯](bold fg:red)'
-vimcmd_symbol = '[❮](bold fg:green)'
-vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
-vimcmd_replace_symbol = '[❮](bold fg:lavender)'
-vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+success_symbol = '[  ](bold fg:#666666)'
+error_symbol = '[  ](bold fg:red)'
+vimcmd_symbol = '[ ❮](bold fg:green)'
+vimcmd_replace_one_symbol = '[ ❮](bold fg:lavender)'
+vimcmd_replace_symbol = '[ ❮](bold fg:lavender)'
+vimcmd_visual_symbol = '[ ❮](bold fg:yellow)'
 
 [cmd_duration]
 show_milliseconds = true

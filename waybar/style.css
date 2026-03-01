@@ -4,10 +4,12 @@
 
 window#waybar {
   background: none;
-  background-color: rgba(0, 0, 0, 0.1);
+  /*
   border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(0, 0, 0, 0.3);
+  */
 }
 button {
   margin: 0 3px;
@@ -15,12 +17,12 @@ button {
   color: rgba(0, 0, 0, 0.2);
 }
 button.empty {
-  color: rgba(0, 0, 0, 0.1);
+  color: rgba(238, 153, 160, 0.2);
 }
 button.focused,
 button:hover,
 button.active {
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(237, 135, 150, 0.4);
 }
 
 /*
@@ -73,7 +75,7 @@ button:hover {
   margin: 0;
   padding: 10px 0;
   font-weight: 700;
-  color: rgba(0, 0, 0, 0.3);
+  color: rgb(245, 189, 230);
   border-radius: 5px;
   background-color: rgba(35, 6, 70, 0.1);
   background: none;
