@@ -13,7 +13,9 @@ vim.opt.shiftwidth = 2
 vim.opt.shiftround = true
 vim.opt.expandtab = true
 vim.opt.fillchars = { eob = " " }
-vim.api.nvim_set_hl(0, "LineNr", { fg = "#808080" })
-
+vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#333333" })
+vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#333333" })
+vim.api.nvim_set_hl(0, "LineNr", { fg = "#666666" })
+vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#cdd6f4", bold = true })
 -- vim.o.signcolumn = "yes:1"
 vim.opt.signcolumn = "no"

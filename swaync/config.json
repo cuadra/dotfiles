@@ -16,7 +16,7 @@
   "notification-inline-replies": false,
   "notification-body-image-height": 100,
   "notification-body-image-width": 200,
-  "timeout": 10,
+  "timeout": 2,
   "timeout-low": 5,
   "timeout-critical": 0,
   "fit-to-screen": true,
@@ -50,12 +50,7 @@
       "app-name": "Spotify"
     }
   },
-  "widgets": [
-    "inhibitors",
-    "title",
-    "dnd",
-    "notifications"
-  ],
+  "widgets": ["inhibitors", "title", "dnd", "notifications"],
   "widget-config": {
     "notifications": {
       "vexpand": true

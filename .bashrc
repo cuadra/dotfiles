@@ -18,7 +18,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-[ -s "$HOME/.secrets/avante.sh" ] && \. "$HOME/.secrets/avante.sh"  # This loads nvm
+# [ -s "$HOME/.secrets/avante.sh" ] && \. "$HOME/.secrets/avante.sh"  # This loads nvm
 
 
 eval "$(starship init bash)"

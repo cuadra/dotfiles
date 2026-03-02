@@ -34,7 +34,7 @@ window-padding-balance = true
 window-padding-x = 60
 window-padding-y = 40
 #
-background-opacity = .5
+background-opacity = 0.2
 # # Spacing around the equals sign does not matter.
 # # All of these are identical:
 # key=value

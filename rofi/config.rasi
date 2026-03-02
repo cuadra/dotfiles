@@ -39,7 +39,7 @@ window {
     transparency: "real";
     //width: 10%;
     border-radius: @b-radius;
-    background-color: rgba(24,25,38,100%);
+    background-color: rgba(24,25,38,80%);
     border:none;
     padding: 20%;
     fullscreen: true;
