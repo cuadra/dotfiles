@@ -46,7 +46,7 @@ window {
 }
 
 prompt {
-    text-color: rgba(42,121,181,100%);
+    text-color: rgb(203, 166, 247);
 }
 
 inputbar {
@@ -54,7 +54,7 @@ inputbar {
     spacing: 8px;
     padding: 30px 15px 30px 30px;
     border-radius: @b-radius;
-    background-color: rgba(41,44,60,100%);
+    background-color: rgb(49, 50, 68);
 }
 
 entry{
@@ -93,7 +93,7 @@ element-icon{
   size: 0.7em;
 }
 element normal.normal, element alternate.normal {
-	background-color: rgba(36,39,58,100%);
+  background-color: rgba(30, 30, 46, 100%);
 	text-color: rgba(54,58,79,100%);
 }
 
