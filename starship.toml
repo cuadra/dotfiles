@@ -1,7 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-format = """
-[󰮯 ](fg:yellow)\
+format = """[󰮯 ](fg:yellow)\
 [• ](fg:white)\
 [󰊠 ](fg:red)\
 [󰊠 ](fg:pink)\
@@ -33,7 +32,7 @@ $line_break\
 $character"""
 
 palette = 'catppuccin_frappe'
-add_newline = true
+add_newline = false
 
 [os]
 disabled = false

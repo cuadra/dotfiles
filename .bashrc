@@ -32,6 +32,7 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+alias emptytrash="rm -rf ~/.local/share/Trash/{files,info}/*"
 
 export EDITOR=nvim
 export VISUAL=nvim
