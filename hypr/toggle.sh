@@ -12,10 +12,6 @@ case $LAYOUT in
     notify-send -a Hyprland 'Layout changed to Monocle'
     ;;
   "monocle")
-    hyprctl keyword general:layout "dwindle"
-    notify-send -a Hyprland 'Layout changed to Dwindle'
-    ;;
-  "dwindle")
     hyprctl keyword general:layout "master"
     notify-send -a Hyprland 'Layout changed to Master'
     ;;
