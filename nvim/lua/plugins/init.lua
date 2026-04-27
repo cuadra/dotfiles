@@ -22,11 +22,8 @@ local blink = require("plugins.blink")
 local oil = require("plugins.oil")
 local telescope = require("plugins.telescope")
 local lualine = require("plugins.lualine")
--- local chatgpt = require("plugins.chatgpt")
 local snacks = require("plugins.snacks")
 local fzf = require("plugins.fzf")
-local copilot = require("plugins.copilot")
--- local avante = require("plugins.avante")
 local neoscroll = require("plugins.neoscroll")
 local plugins = {
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -40,9 +37,6 @@ local plugins = {
 	lualine,
 	snacks,
 	fzf,
-	copilot,
-	-- chatgpt,
-	--avante,
 	neoscroll,
 }
 --require('oil').setup()

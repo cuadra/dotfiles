@@ -29,8 +29,8 @@ return {
 			-- keymap = { preset = "default" },
 			keymap = {
 				["<C-space>"] = { "show", "show_documentation", "hide" },
-				["<CR>"] = { "accept", "fallback" },
-				["<Tab>"] = { "select_next", "fallback" },
+				["<Tab>"] = { "accept", "fallback" },
+				--["<Tab>"] = { "select_next", "fallback" },
 			},
 
 			appearance = {
