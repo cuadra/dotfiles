@@ -68,6 +68,13 @@ local mode_map = {
 	["MORE"] = "M",
 }
 require("lualine").setup({
+	options = {
+		disabled_filetypes = {
+			statusline = { "oil", "NvimTree" }, -- Add 'oil' here to hide the bar
+			winbar = {},
+		},
+	},
+
 	sections = {
 		lualine_a = { {
 			"mode",
@@ -79,9 +86,10 @@ require("lualine").setup({
 		lualine_c = {},
 		lualine_x = { { "filetype", icon_only = true, icon = { align = "right" } } },
 		lualine_y = { "diagnostics" },
-		lualine_z = {
+		lualine_z = { {
 			"filename",
-		},
+			path = 1,
+		} },
 	},
 })
 
