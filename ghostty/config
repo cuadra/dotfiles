@@ -36,8 +36,8 @@ window-padding-balance = true
 window-padding-x = 30
 window-padding-y = 30
 #
-background-opacity = 1
-unfocused-split-opacity = 1.0
+background-opacity = .9
+unfocused-split-opacity = .7
 scrollbar = never
 # # Spacing around the equals sign does not matter.
 # # All of these are identical:

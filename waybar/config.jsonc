@@ -24,9 +24,9 @@
     //"disk",
     //"custom/separator",
     //"custom/notification",
-    "wireplumber",
+    //"wireplumber",
     //"custom/separator",
-    "temperature",
+    //"temperature",
     "clock"
     //"network"
     //"backlight"
