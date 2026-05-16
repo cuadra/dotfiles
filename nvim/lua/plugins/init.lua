@@ -25,6 +25,9 @@ local lualine = require("plugins.lualine")
 local snacks = require("plugins.snacks")
 local fzf = require("plugins.fzf")
 local neoscroll = require("plugins.neoscroll")
+local ai_helper = require("plugins.ai_helper")
+--local minuet = require("plugins.minuet")
+
 local plugins = {
 	{ "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 	conform,
@@ -38,6 +41,8 @@ local plugins = {
 	snacks,
 	fzf,
 	neoscroll,
+	ai_helper,
+	--minuet,
 }
 --require('oil').setup()
 
