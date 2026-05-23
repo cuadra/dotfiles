@@ -1,10 +1,27 @@
 * {
-  font-family: "Jetbrains Mono", monospace;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: "Hack Nerd Font", monospace;
 }
 
 window#waybar {
-  background: none;
+  color: rgb(255, 207, 140);
+  background-color: rgba(230, 41, 85, 1);
+}
+window#waybar.top_bar {
   /*
+  border-radius: 0 0 7px 7px;
+  background-color: rgba(230, 41, 85, 1);
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  */
+}
+window#waybar.bottom_bar {
+  /*
+  border-radius: 7px 7px 0 0;
+  background-color: rgba(230, 41, 85, 1);
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -12,9 +29,9 @@ window#waybar {
   */
 }
 button {
-  margin: 0 3px;
+  margin: 0;
   padding: 0;
-  color: rgba(0, 84, 158, 1);
+  color: rgba(0, 0, 0, 0.3);
 }
 button.empty {
   color: rgba(0, 0, 0, 0.3);
@@ -22,7 +39,7 @@ button.empty {
 button.focused,
 button:hover,
 button.active {
-  color: rgba(255, 255, 255, 1);
+  color: rgb(255, 207, 140);
 }
 
 /*
@@ -73,19 +90,37 @@ button:hover {
 #custom-separator,
 #workspaces,
 #custom-notification {
-  margin: 0;
-  font-weight: 700;
-  color: rgb(255, 255, 255);
-  border: none;
 }
-#workspaces {
-  padding: 3px 15px;
-  background: rgba(0, 187, 255, 0.5);
-  border-radius: 5px;
+
+#cpu {
+  padding: 10px 0 10px 27px;
 }
-#custom-status {
-  margin-left: 7px;
+#temperature,
+#memory,
+#disk {
+  padding: 10px 0;
 }
-#clock {
-  margin-right: 7px;
+#clock,
+#network,
+#workspaces,
+#keyboard-state {
+  padding: 10px 27px;
+}
+#pulseaudio {
+  padding: 10px 27px 10px 0;
+}
+#clock,
+#workspaces,
+#pulseaudio {
+}
+#custom-window-layout {
+  padding: 10px 7px;
+  font-size: 20px;
+}
+#cpu,
+#temperature,
+#memory,
+#disk,
+#network,
+#keyboard-state {
 }
