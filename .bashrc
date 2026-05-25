@@ -38,3 +38,7 @@ export EDITOR=nvim
 export VISUAL=nvim
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/jcuadra/.local/bin:$PATH"

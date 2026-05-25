@@ -23,6 +23,7 @@
   ],
 
   "modules-right": [
+    "custom/tasks",
     "custom/github",
     "custom/teams",
     "custom/separator",
@@ -223,6 +224,11 @@
     "tooltip": false
 },
 
+"custom/tasks": {
+    "tooltip": false,
+    "format": "",
+    "on-click": "kitty --hold task list"
+  },
 "custom/computer": {
     "tooltip": false,
     "format": "",
