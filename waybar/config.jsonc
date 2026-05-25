@@ -23,8 +23,17 @@
   ],
 
   "modules-right": [
+    "custom/github",
+    "custom/teams",
+    "custom/separator",
+    "custom/postgres",
+    "custom/postgreslogin",
+    "custom/separator",
     "custom/window-layout",
-    "pulseaudio"
+    "custom/separator",
+    "pulseaudio#mic",
+    "custom/separator",
+    "pulseaudio#vol"
   ],
 
   "group/custom-group": {
@@ -50,7 +59,8 @@
         "scrolling": "",    // Horizontal arrows
         "monocle": ""
     },
-    "tooltip": false
+    "tooltip": false,
+    "on-click": "~/.config/hypr/toggle.sh"
 },
 "custom/notification": {
     "tooltip": true,
@@ -76,6 +86,7 @@
   "hyprland/workspaces": {
     //"on-click": "activate",
     //"active-only": false,
+    "tooltip": false,
     "all-outputs": true,
     "format": "{icon}",
     "format-icons": {
@@ -110,6 +121,7 @@
   },
 
   "clock": {
+    "tooltip": false,
     "interval": 60,
     "format": "  {:%a %b %d  󰥔 %I:%M %p}" // %b %d %Y  --Date formatting
     //"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
@@ -180,7 +192,7 @@
     "format-alt": "{ifname}: {ipaddr}/{cidr}"
   },
 
-  "pulseaudio": {
+  "pulseaudio#vol": {
     "scroll-step": 1, // %, can be a float
     "format": "{icon} {volume}%", //{format_source}",
     "format-bluetooth": "{icon} {volume}% 󰂯", //{format_source}",
@@ -197,9 +209,45 @@
       "car": "",
       "default": ["", "", ""],
     },
-    "on-click": "kitty -e pulsemixer"
+    "on-click": "kitty -e pulsemixer",
+    "tooltip": false
   },
+  "pulseaudio#mic": {
+    "format": "{format_source}",
+    "format-muted": "{format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": "  {volume}%",
+    "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+    "on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +5%",
+    "on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -5%",
+    "tooltip": false
+},
 
+"custom/computer": {
+    "tooltip": false,
+    "format": "",
+    "on-click": ""
+  },
+"custom/github": {
+    "tooltip": false,
+    "format": "",
+    "on-click": "vivaldi https://github.com/cuadra"
+  },
+"custom/postgres": {
+    "tooltip": false,
+    "format": "",
+    "on-click": "kitty sudo systemctl start postgresql"
+  },
+"custom/postgreslogin": {
+    "tooltip": false,
+    "format": "",
+    "on-click": "kitty psql -h localhost -U postgres -d gsktesting"
+  },
+"custom/teams": {
+    "tooltip": false,
+    "format": "󰊻",
+    "on-click": "vivaldi https://teams.microsoft.com/v2/"
+  },
   "wireplumber": {
     "format": "{icon}  {volume:>3}%",
     "format-muted": "󰖁 {volume:>3}%",
@@ -282,7 +330,7 @@
 
   "custom/separator": {
     "format": "{icon}",
-    "format-icons": "|",
+    "format-icons": "",
     "tooltip": false
   },
 
@@ -371,7 +419,11 @@
 
   // Choose the order of the modules
 
-  "modules-center": ["keyboard-state"],
+  "modules-center": [
+    "custom/users",
+    "custom/power",
+    "custom/lock"
+],
 
   "modules-left": [
 
@@ -383,6 +435,10 @@
   ],
 
   "modules-right": [
+    "keyboard-state",
+    "custom/separator",
+    "custom/computer",
+    "custom/separator",
     "network"
   ],
 
@@ -396,6 +452,36 @@
       //"custom/kdeconnect",
       //"custom/wifi",
     ]
+  },
+"custom/computer": {
+    "tooltip": false,
+    "format": "",
+    "on-click": ""
+  },
+"custom/github": {
+    "tooltip": false,
+    "format": "",
+    "on-click": ""
+  },
+"custom/postgres": {
+    "tooltip": false,
+    "format": "",
+    "on-click": ""
+  },
+"custom/teams": {
+    "tooltip": false,
+    "format": "󰊻",
+    "on-click": ""
+  },
+"custom/users": {
+    "tooltip": false,
+    "format": "",
+    "on-click": ""
+  },
+"custom/lock": {
+    "tooltip": false,
+    "format": "",
+    "on-click": "hyprlock"
   },
 "custom/notification": {
     "tooltip": true,
@@ -479,18 +565,21 @@
     "critical-threshold": 80,
     "interval": 2,
     "format": " {temperatureC:>2}°C",
-    "format-icons": ["", "", ""]
+    "format-icons": ["", "", ""],
+    "tooltip":false
     //"on-click": "hyprctl dispatcher togglespecialworkspace monitor"
   },
 
   "memory": {
     "interval": 2,
-    "format": " {:>2}%"
+    "format": " {:>2}%",
+    "tooltip": false
   },
 
   "disk": {
     "interval": 15,
-    "format": "󰋊 {percentage_used:>2}%"
+    "format": "󰋊 {percentage_used:>2}%",
+    "tooltip":false
   },
   "gpu_temperature": {
     "thermal-zone": 2,
@@ -527,7 +616,8 @@
     "tooltip-format": "{ifname} via {gwaddr} ",
     "format-linked": "{ifname} (No IP) ",
     "format-disconnected": "󰀦 Disconnected", //Disconnected ⚠
-    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip":false
   },
 
   "pulseaudio": {
@@ -598,6 +688,8 @@
     "tooltip": false
   },
 
+
+
   "custom/power": {
     "format": "{icon}",
     "format-icons": "  ", //  
@@ -632,7 +724,7 @@
 
   "custom/separator": {
     "format": "{icon}",
-    "format-icons": "|",
+    "format-icons": "",
     "tooltip": false
   },
 

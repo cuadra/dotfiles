@@ -33,7 +33,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 alias emptytrash="rm -rf ~/.local/share/Trash/{files,info}/*"
-
+alias v='vivaldi'
 export EDITOR=nvim
 export VISUAL=nvim
 export PATH="$HOME/.local/bin:$PATH"

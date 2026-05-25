@@ -3,7 +3,7 @@ return {
 	virtual = true,
 	dir = vim.fn.stdpath("config"),
 	config = function()
-		local lm_studio_url = "<placeholder>"
+		local lm_studio_url = "http://192.168.20.2:1234/v1/chat/completions"
 
 		local function perform_ai_request()
 			local mode = vim.api.nvim_get_mode().mode
