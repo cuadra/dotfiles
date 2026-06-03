@@ -10,6 +10,9 @@ case $LAYOUT in
     hyprctl keyword general:layout "monocle"
     ;;
   "monocle")
+    hyprctl keyword general:layout "dwindle"
+    ;;
+  "dwindle")
     hyprctl keyword general:layout "master"
     ;;
   *) ;;
