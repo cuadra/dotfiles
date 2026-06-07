@@ -1,6 +1,6 @@
 
 * {
-    font: "Hack 22";
+    font: "Hack 20";
     g-spacing: 10px;
     g-margin: 0;
     b-color: #000000FF;
@@ -25,7 +25,7 @@ configuration {
     drun-display-format: "{icon} {name}";
 }
 listview {
-    columns: 1;
+    columns: 3;
     //lines:2;
     fixed-height: false;
     fixed-columns: false;
@@ -39,7 +39,7 @@ window {
     transparency: "real";
     //width: 10%;
     border-radius: @b-radius;
-    background-color: rgba(24,25,38,80%);
+    background-color: rgba(24,25,38,90%);
     border:none;
     padding: 20%;
     fullscreen: true;
@@ -52,6 +52,7 @@ prompt {
 inputbar {
     children: ["prompt", "entry"];
     spacing: 8px;
+    margin: 0 5px;
     padding: 30px 15px 30px 30px;
     border-radius: @b-radius;
     background-color: rgb(49, 50, 68);
@@ -75,7 +76,7 @@ mainbox {
 
 element {
     spacing: @g-spacing;
-    margin: 5px 0;
+    margin: 5px;
     padding: 30px 15px;
     border: 0px solid;
     border-radius: @b-radius;
