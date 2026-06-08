@@ -67,3 +67,8 @@ keybind = ctrl+k=goto_split:top
 keybind = ctrl+h=goto_split:left
 keybind = ctrl+l=goto_split:right
 #
+#
+#
+# Shaders
+custom-shader = shaders/ripple_cursor.glsl
+custom-shader = shaders/cursor_warp.glsl
