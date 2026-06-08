@@ -18,7 +18,9 @@
     "clock"
   ],
 
-  "modules-left": [],
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
 
   "modules-right": [
     "custom/tasks",
@@ -66,7 +68,7 @@
   },
   // Modules configuration
   "hyprland/workspaces": {
-    //"on-click": "activate",
+    "on-click": "activate",
     //"active-only": false,
     "tooltip": false,
     "all-outputs": true,
@@ -77,7 +79,7 @@
       "active": "󰮯",
       "focused": "",
       //"default": ""
-      "default": ""
+      "default": "󰊠"
     },
     "persistent-workspaces": {
       "1": [],

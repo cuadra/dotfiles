@@ -36,13 +36,10 @@ window#waybar.bottom_bar {
 #workspaces button {
   margin: 0 3px;
   padding: 0;
-  color: transparent;
-  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.3);
   min-width: 10px;
   min-height: 10px;
-}
-#workspaces button.empty {
-  background-color: rgba(0, 0, 0, 1);
+  font-family: "JetBrainsMono Nerd Font", sans-serif;
 }
 
 /*
@@ -76,8 +73,6 @@ button:hover {
 #workspaces button.focused,
 #workspaces button:hover,
 #workspaces button.active {
-  background-color: rgb(255, 207, 140);
-  background-color: rgba(66, 66, 66, 1);
 }
 /*
 #workspaces button.empty {
