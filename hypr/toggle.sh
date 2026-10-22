@@ -19,4 +19,8 @@ case $LAYOUT in
 
 esac
 
-pkill -RTMIN+8 waybar
+# Announce the new layout
+NEW=$(hyprctl -j getoption general:layout | jq -r '.str')
+notify-send -a Hyprland -t 1500 -r 9102 \
+  -h string:x-canonical-private-synchronous:hypr-layout \
+  "Layout: $NEW"

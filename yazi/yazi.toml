@@ -1,3 +1,12 @@
 # yazi.toml
 [mgr]
 show_hidden = true
+[opener]
+pinhop = [
+    { run = '/usr/bin/pinhop %s', orphan = true, desc = "Open in Pinhop" }
+]
+
+[open]
+prepend_rules = [
+    { mime = "application/pdf", use = "pinhop" }
+]

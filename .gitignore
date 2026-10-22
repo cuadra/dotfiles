@@ -32,3 +32,10 @@ okularrc
 okularpartrc
 MusicBrainz/
 gh/
+
+# Secrets / app state (added after secrets audit)
+Claude/
+pulse/
+*.log
+mpd/*
+!mpd/mpd.conf

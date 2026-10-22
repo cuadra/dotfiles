@@ -1,0 +1,578 @@
+// Matches the current Waybar look
+$bg: rgba(0, 0, 0, 1);
+$fg: rgba(255, 255, 255, 0.7);
+$radius: 7px;
+$height: 30px;
+
+window.Bar {
+  background: transparent;
+}
+
+.bar-body {
+  background: $bg;
+  border-radius: 0 0 $radius $radius;
+  min-height: $height;
+  // top, right, bottom, left. The left is smaller because the recording glyph
+  // carries extra space on its left, so this makes both ends look even.
+  padding: 0 27px 0 18px;
+  color: $fg;
+  font-family: "Hack Nerd Font", monospace;
+  font-size: 14px;
+}
+
+.icon {
+  font-size: 16px;
+  color: $fg;
+}
+
+// Bar color for the visualizers (read by the drawing code)
+.visualizer {
+  color: $fg;
+}
+
+// Screen recording indicator (left end of the bar): grey when idle, red while recording
+@keyframes rec-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+.Bar button.recording {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  .icon {
+    color: rgba(255, 255, 255, 0.25); // idle: greyed out
+    // This glyph sits low in the font; lift it to line up with the other icons.
+    // Raise to move it up further, lower to move it down.
+    margin-bottom: 3px;
+  }
+  &:hover .icon {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  &.active .icon {
+    color: rgb(248, 113, 113); // recording: pulsing red
+    animation: rec-pulse 1.4s ease-in-out infinite;
+  }
+}
+
+.divider {
+  margin: 0 4px;
+}
+
+// ══ Dashboard (Super+D) ═══════════════════════════════════════════════
+// Gauge colors are drawn in code: keep widget/dashboard/theme.ts in sync.
+$dash-bg: rgba(16, 16, 24, 0.96);
+$dash-card: rgba(255, 255, 255, 0.05);
+$dash-border: rgba(255, 255, 255, 0.07);
+$dash-text: rgba(255, 255, 255, 0.92);
+$dash-sub: rgba(255, 255, 255, 0.62);
+$dash-muted: rgba(255, 255, 255, 0.38);
+$dash-faint: rgba(255, 255, 255, 0.18);
+$dash-purple: rgb(167, 139, 250);
+$dash-teal: rgb(94, 214, 200);
+$dash-radius: 16px;
+$dash-card-radius: 12px;
+
+window.Dashboard {
+  background: transparent;
+  font-family: "Inter", "Hack Nerd Font", sans-serif; // Nerd Font as fallback for icons
+  color: $dash-text;
+
+  // Clean slate for buttons (the GTK theme adds borders/backgrounds)
+  button {
+    background: none;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    min-height: 0;
+    min-width: 0;
+  }
+}
+
+// Full-screen dim layer behind the dashboard. Keep its alpha below the
+// ignore_alpha value of the ags-dashboard blur rule in hyprland.conf (0.5),
+// or Hyprland will blur the whole screen behind it.
+.backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+.dash {
+  background: $dash-bg;
+  border: 1px solid $dash-border;
+  border-radius: $dash-radius;
+  padding: 18px;
+}
+.dash-card {
+  background: $dash-card;
+  border: 1px solid $dash-border;
+  border-radius: $dash-card-radius;
+  padding: 16px 18px;
+}
+.dash-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: $dash-muted;
+}
+.dash-meta {
+  font-size: 11px;
+  color: $dash-sub;
+}
+
+// ── Time ──
+.clock {
+  font-size: 64px;
+  font-weight: 200;
+  letter-spacing: -1px;
+  color: $dash-text;
+}
+.clock-ampm {
+  font-size: 18px;
+  font-weight: 400;
+  color: $dash-purple;
+  margin-bottom: 12px;
+}
+.clock-date {
+  font-size: 14px;
+  color: $dash-sub;
+}
+.chips {
+  margin-top: 6px;
+}
+.chip {
+  font-size: 11px;
+  color: $dash-sub;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $dash-border;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.chip-dot {
+  font-size: 7px;
+  color: $dash-purple;
+}
+
+// ── Calendar ──
+.cal-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: $dash-sub;
+}
+window.Dashboard .cal-nav {
+  color: $dash-muted;
+  font-size: 10px;
+  padding: 2px 6px;
+  &:hover {
+    color: $dash-text;
+  }
+}
+.cal-weekday {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: $dash-muted;
+}
+.cal-day {
+  font-size: 13px;
+  color: $dash-text;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 999px;
+  &.weekend {
+    color: $dash-sub;
+  }
+  &.other {
+    color: $dash-faint;
+  }
+  &.today {
+    background: $dash-purple;
+    color: rgb(20, 18, 30);
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(167, 139, 250, 0.55);
+  }
+}
+
+// ── System ──
+.legend {
+  font-size: 11px;
+  color: $dash-sub;
+}
+.legend-line {
+  min-width: 14px;
+  min-height: 3px;
+  border-radius: 2px;
+  &.load {
+    background: $dash-purple;
+  }
+  &.temp {
+    background: $dash-teal;
+  }
+}
+.gauge-value {
+  font-size: 17px;
+  font-weight: 300;
+  color: $dash-text;
+}
+.gauge-unit {
+  font-size: 9px;
+  color: $dash-sub;
+  margin-bottom: 3px;
+}
+.gauge-temp {
+  font-size: 10px;
+  color: $dash-muted;
+}
+.gauge-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: $dash-sub;
+}
+
+// ── Shortcuts ──
+window.Dashboard .shortcut {
+  min-width: 46px;
+  min-height: 46px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $dash-border;
+  color: $dash-text;
+  font-size: 18px;
+  &:hover {
+    background: rgba(167, 139, 250, 0.16);
+    border-color: rgba(167, 139, 250, 0.4);
+  }
+}
+
+// ── Connectivity (Wi-Fi / Bluetooth toggles) ──
+.toggle-icon {
+  font-family: "Hack Nerd Font Mono", "Hack Nerd Font", monospace;
+  font-size: 18px;
+  min-width: 22px;
+  color: $dash-muted;
+}
+.toggle-row.on .toggle-icon {
+  color: $dash-purple;
+}
+.toggle-name {
+  font-size: 13px;
+  color: $dash-text;
+}
+.toggle-status {
+  font-size: 11px;
+  color: $dash-muted;
+}
+window.Dashboard switch.toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  box-shadow: none;
+  outline: none;
+  border-radius: 999px;
+  min-width: 40px;
+  min-height: 22px;
+  padding: 2px;
+  &:checked {
+    background: $dash-purple;
+  }
+  &:disabled {
+    opacity: 0.35;
+  }
+  > slider {
+    background: white;
+    border: none;
+    box-shadow: none;
+    border-radius: 999px;
+    min-width: 18px;
+    min-height: 18px;
+    margin: 0;
+  }
+  > image {
+    color: transparent; // hide GTK's on/off marks
+  }
+}
+
+// ── Workspaces + layouts ──
+// Free-floating row under the calendar (no card), lined up with the card edges
+.ws-row {
+  padding: 2px 4px;
+}
+window.Dashboard .ws-dot {
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 999px;
+  background: $dash-faint;
+  &.occupied {
+    background: rgba(255, 255, 255, 0.42);
+  }
+  &.active {
+    min-width: 28px;
+    background: $dash-purple;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+  }
+  &:hover {
+    background: rgba(255, 255, 255, 0.6);
+  }
+  &.active:hover {
+    background: $dash-purple;
+  }
+}
+// Vertical line between the workspace dots and the layout switcher
+.ws-divider {
+  min-width: 1px;
+  min-height: 18px;
+  background: $dash-border;
+}
+.seg {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid $dash-border;
+  border-radius: 10px;
+  padding: 3px;
+}
+window.Dashboard .seg-btn {
+  min-width: 28px;
+  min-height: 26px;
+  border-radius: 7px;
+  color: $dash-muted;
+  font-size: 13px;
+  // Mono Nerd Font sizes each icon to one cell, so it centers in the button
+  // (the regular Nerd Font draws these wider than their space, off-center)
+  font-family: "Hack Nerd Font Mono", "Hack Nerd Font", monospace;
+  &:hover {
+    color: $dash-text;
+  }
+  &.active {
+    background: rgba(167, 139, 250, 0.22);
+    color: $dash-purple;
+  }
+}
+
+// ── Audio ──
+window.Dashboard .audio-icon {
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $dash-border;
+  color: $dash-sub;
+  font-size: 14px;
+  &:hover {
+    color: $dash-text;
+  }
+}
+.audio-name {
+  font-size: 13px;
+  color: $dash-text;
+}
+.audio-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: $dash-text;
+}
+scale.audio-slider {
+  padding: 4px 0;
+  > trough {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 999px;
+    min-height: 4px;
+    > highlight {
+      background: $dash-purple;
+      border: none;
+      border-radius: 999px;
+    }
+    > slider {
+      background: white;
+      border: none;
+      border-radius: 999px;
+      min-width: 14px;
+      min-height: 14px;
+      margin: -6px 0;
+      box-shadow: 0 0 10px rgba(167, 139, 250, 0.8);
+    }
+  }
+}
+.audio-row.muted {
+  .audio-icon {
+    color: rgb(248, 113, 113);
+  }
+  .audio-value {
+    color: $dash-muted;
+  }
+  scale.audio-slider > trough > highlight {
+    background: $dash-faint;
+  }
+}
+
+// ── App launcher (top of the dashboard) ──
+.launcher {
+  padding: 10px 14px;
+}
+.launcher-field {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid $dash-border;
+  border-radius: 10px;
+  padding: 4px 10px;
+}
+.launcher-icon image {
+  color: $dash-sub; // tints the symbolic search icon
+}
+window.Dashboard entry.launcher-entry {
+  background: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  color: $dash-text;
+  caret-color: $dash-purple;
+  font-size: 14px;
+  min-height: 28px;
+  padding: 0;
+}
+.launcher-hint {
+  font-size: 12px;
+  color: $dash-muted;
+}
+window.Dashboard .app-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid $dash-border;
+  border-radius: 9px;
+  padding: 5px 12px;
+  color: $dash-sub;
+  font-size: 12px;
+  &:hover {
+    color: $dash-text;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  &.active {
+    background: rgba(167, 139, 250, 0.18);
+    border-color: rgba(167, 139, 250, 0.55);
+    color: $dash-text;
+  }
+}
+.key {
+  font-size: 10px;
+  color: $dash-sub;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid $dash-border;
+  border-radius: 5px;
+  padding: 1px 6px;
+}
+
+// ── Notification history (right side of the dashboard) ──
+.notif-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: $dash-text;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 0 7px;
+}
+window.Dashboard .notif-clear {
+  font-size: 11px;
+  color: $dash-sub;
+  border: 1px solid $dash-border;
+  border-radius: 7px;
+  padding: 3px 10px;
+  &:hover {
+    color: $dash-text;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+.notif-item {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid $dash-border;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.notif-icon {
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  &.letter {
+    font-size: 13px;
+    font-weight: 600;
+    color: $dash-purple;
+    background: rgba(167, 139, 250, 0.15);
+  }
+}
+.notif-app {
+  font-size: 11px;
+  color: $dash-muted;
+}
+.notif-time {
+  font-size: 10px;
+  color: $dash-muted;
+  margin-left: 6px;
+}
+window.Dashboard .notif-dismiss {
+  margin-left: 6px;
+  font-size: 9px;
+  color: $dash-faint;
+  &:hover {
+    color: $dash-text;
+  }
+}
+.notif-summary {
+  font-size: 13px;
+  font-weight: 600;
+  color: $dash-text;
+}
+.notif-body {
+  font-size: 12px;
+  color: $dash-sub;
+}
+// Thin scrollbar for the history
+.notif-panel scrollbar {
+  background: none;
+  border: none;
+  slider {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    min-width: 4px;
+  }
+}
+
+// ══ Notifications ════════════════════════════════════════════════════
+// Same look as the bar: solid black, 7px corners, 54px tall
+window.Notifications {
+  background: transparent;
+}
+.notification {
+  background: $bg;
+  border-radius: $radius;
+  min-height: $height;
+  padding: 8px 12px 8px 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Hack Nerd Font", monospace;
+
+  .summary {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .body {
+    font-size: 15px;
+    color: $fg;
+    margin-top: 2px;
+  }
+  &.critical {
+    border: 1px solid rgb(243, 139, 168);
+  }
+  .close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: none;
+    border-radius: 50%;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0;
+    color: $fg;
+    font-size: 12px;
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+  }
+}
