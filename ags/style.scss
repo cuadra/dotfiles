@@ -543,18 +543,17 @@ window.Notifications {
 }
 .notification {
   background: $bg;
-  border-radius: $radius;
+  border-radius: 0 0 0 $radius;
   min-height: $height;
-  padding: 8px 12px 8px 16px;
+  padding: 0px 12px 0px 16px;
   color: rgba(255, 255, 255, 0.9);
   font-family: "Hack Nerd Font", monospace;
 
   .summary {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
   }
   .body {
-    font-size: 15px;
+    font-size: 12px;
     color: $fg;
     margin-top: 2px;
   }
@@ -562,10 +561,8 @@ window.Notifications {
     border: 1px solid rgb(243, 139, 168);
   }
   .close {
-    background: rgba(255, 255, 255, 0.1);
     border: none;
     box-shadow: none;
-    border-radius: 50%;
     min-width: 24px;
     min-height: 24px;
     padding: 0;

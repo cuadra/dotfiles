@@ -39,7 +39,11 @@ function show(popup: Popup, timeout: number) {
     return copy
   })
   clearTimeout(timers.get(popup.key))
-  if (timeout > 0) timers.set(popup.key, setTimeout(() => remove(popup.key), timeout))
+  if (timeout > 0)
+    timers.set(
+      popup.key,
+      setTimeout(() => remove(popup.key), timeout),
+    )
 }
 
 // ── Notifications from apps (notify-send, browsers, …) ────────────────
@@ -53,10 +57,26 @@ notifd.connect("notified", (_, id: number) => {
   const n = notifd.get_notification(id)
   if (!n) return
   // Hyprland popups (e.g. "Layout: scrolling" from toggle.sh) replace each other
-  const key = n.appName === "Hyprland" ? `hypr:${n.summary.split(/[: ]/)[0]}` : `n${id}`
+  const key =
+    n.appName === "Hyprland" ? `hypr:${n.summary.split(/[: ]/)[0]}` : `n${id}`
   const timeout =
-    n.urgency === CRITICAL ? 0 : n.expireTimeout > 0 ? n.expireTimeout : n.urgency === LOW ? NOTIFY.lowTimeout : NOTIFY.timeout
-  show({ key, summary: n.summary, body: n.body, urgency: n.urgency, notification: n }, timeout)
+    n.urgency === CRITICAL
+      ? 0
+      : n.expireTimeout > 0
+        ? n.expireTimeout
+        : n.urgency === LOW
+          ? NOTIFY.lowTimeout
+          : NOTIFY.timeout
+  show(
+    {
+      key,
+      summary: n.summary,
+      body: n.body,
+      urgency: n.urgency,
+      notification: n,
+    },
+    timeout,
+  )
 })
 
 notifd.connect("resolved", (_, id: number) => {
@@ -71,23 +91,57 @@ hypr.connect("notify::focused-workspace", () => {
   const ws = hypr.focusedWorkspace
   if (!ws || ws.id === lastWorkspace) return
   lastWorkspace = ws.id
-  show({ key: "hypr:Workspace", summary: `Workspace ${ws.name}`, body: "", urgency: AstalNotifd.Urgency.NORMAL }, NOTIFY.hyprTimeout)
+  show(
+    {
+      key: "hypr:Workspace",
+      summary: `Workspace ${ws.name}`,
+      body: "",
+      urgency: AstalNotifd.Urgency.NORMAL,
+    },
+    NOTIFY.hyprTimeout,
+  )
 })
 
 // ── Popup widget ──────────────────────────────────────────────────────
 function PopupView({ p }: { p: Popup }) {
-  const close = () => (p.notification ? p.notification.dismiss() : remove(p.key))
-  const urgency = p.urgency === CRITICAL ? "critical" : p.urgency === LOW ? "low" : "normal"
+  const close = () =>
+    p.notification ? p.notification.dismiss() : remove(p.key)
+  const urgency =
+    p.urgency === CRITICAL ? "critical" : p.urgency === LOW ? "low" : "normal"
 
   return (
-    <box class={`notification ${urgency}`} widthRequest={NOTIFY.width} spacing={12}>
-      <box orientation={Gtk.Orientation.VERTICAL} valign={Gtk.Align.CENTER} hexpand>
-        <label class="summary" label={p.summary} xalign={0} ellipsize={Pango.EllipsizeMode.END} />
+    <box
+      class={`notification ${urgency}`}
+      widthRequest={NOTIFY.width}
+      spacing={12}
+    >
+      <box
+        orientation={Gtk.Orientation.VERTICAL}
+        valign={Gtk.Align.CENTER}
+        hexpand
+      >
+        <label
+          class="summary"
+          label={p.summary}
+          xalign={0}
+          ellipsize={Pango.EllipsizeMode.END}
+        />
         {p.body !== "" && (
-          <label class="body" label={p.body} xalign={0} wrap maxWidthChars={50} />
+          <label
+            class="body"
+            label={p.body}
+            xalign={0}
+            wrap
+            maxWidthChars={50}
+          />
         )}
       </box>
-      <button class="close" valign={Gtk.Align.CENTER} tooltipText="Dismiss" onClicked={() => close()}>
+      <button
+        class="close"
+        valign={Gtk.Align.CENTER}
+        tooltipText="Dismiss"
+        onClicked={() => close()}
+      >
         <label label={NOTIFY.closeIcon} />
       </button>
     </box>
@@ -103,8 +157,6 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
       class="Notifications"
       gdkmonitor={gdkmonitor}
       anchor={TOP | RIGHT}
-      marginTop={NOTIFY.marginTop}
-      marginRight={NOTIFY.marginRight}
       layer={Astal.Layer.OVERLAY}
       // Ignore other windows' reserved space so the first popup sits level with the bar
       exclusivity={Astal.Exclusivity.IGNORE}
