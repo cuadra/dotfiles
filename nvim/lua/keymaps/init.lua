@@ -81,8 +81,52 @@ keymap("n", "<leader>i", ":lua Snacks.indent.enable()<cr>", opts)
 keymap("n", "<leader>I", ":lua Snacks.indent.disable()<cr>", opts)
 
 -- Copy and Pasting with the Clipboard
-keymap("n", "<leader>Y", '"+y', opts)
-keymap("n", "<leader>P", '"+p', opts)
+-- System clipboard (wl-clipboard).
+-- Plain yanks (y, yy, V+y) also go to the clipboard; deletes (d, x, c) stay inside nvim.
+-- <leader>p / <leader>P paste text copied in other apps.
+local map = vim.keymap.set
+map({ "n", "x" }, "<leader>p", '"+p', { silent = true, desc = "Paste clipboard after" }) -- visual: replace selection
+map({ "n", "x" }, "<leader>P", '"+P', { silent = true, desc = "Paste clipboard before" })
+
+local clip_group = vim.api.nvim_create_augroup("yank_to_clipboard", { clear = true })
+-- Last text nvim and the clipboard agreed on, so we only pull in *new* copies.
+local last_clip = nil
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = clip_group,
+  callback = function()
+    local ev = vim.v.event
+    -- Only plain yanks into the default register (skip "ay etc. and deletes).
+    if ev.operator ~= "y" or ev.regname ~= "" then
+      return
+    end
+    local text = table.concat(ev.regcontents, "\n")
+    local regtype = ev.regtype
+    -- Whole-line yanks: drop the trailing newline so pasting elsewhere
+    -- doesn't add a line break (or run the line in a terminal).
+    if regtype == "V" then
+      regtype = "v"
+    end
+    last_clip = text
+    vim.schedule(function()
+      vim.fn.setreg("+", text, regtype)
+    end)
+  end,
+})
+
+-- Coming back to nvim: if something new was copied in another app,
+-- put it in the default register so plain p pastes it.
+vim.api.nvim_create_autocmd("FocusGained", {
+  group = clip_group,
+  callback = function()
+    local ok, text = pcall(vim.fn.getreg, "+")
+    if not ok or text == "" or text == last_clip then
+      return
+    end
+    last_clip = text
+    vim.fn.setreg('"', text, vim.fn.getregtype("+"))
+  end,
+})
 
 -- copy and pasting
 -- yw to copy word
