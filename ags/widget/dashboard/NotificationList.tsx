@@ -3,12 +3,12 @@ import Pango from "gi://Pango"
 import GLib from "gi://GLib"
 import AstalNotifd from "gi://AstalNotifd"
 import { createBinding, For } from "ags"
-import { createPoll } from "ags/time"
+import { livePoll } from "../../lib/scheduler"
 
 const notifd = AstalNotifd.get_default()
 const notifications = createBinding(notifd, "notifications")
 const sorted = notifications((list) => [...list].sort((a, b) => b.time - a.time)) // newest first
-const now = createPoll(Math.floor(Date.now() / 1000), 30_000, () => Math.floor(Date.now() / 1000))
+const now = livePoll(Math.floor(Date.now() / 1000), 30_000, () => Math.floor(Date.now() / 1000))
 
 function ago(time: number, nowSecs: number) {
   const s = Math.max(0, nowSecs - time)

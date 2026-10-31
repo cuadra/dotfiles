@@ -7,20 +7,37 @@ import { speaker, microphone, level } from "../lib/audio"
 import { BAR, OUTPUT, MIC, ICONS } from "../config"
 
 function SpeakerIcon() {
-  const volume = createBinding(speaker, "volume")
   const mute = createBinding(speaker, "mute")
-  const icon = createComputed(() => {
-    if (mute() || volume() <= 0) return ICONS.speakerMuted
-    const i = Math.min(2, Math.floor(volume() * 3))
-    return ICONS.speaker[i]
-  })
-  return <label class="icon speaker" label={icon} />
+  // One fixed icon so the bar never shifts; muted just turns it dark grey (see style.scss).
+  // Click to mute / unmute the speaker
+  return (
+    <button
+      class={mute((m) => (m ? "audio-toggle muted" : "audio-toggle"))}
+      focusOnClick={false}
+      cursor={Gdk.Cursor.new_from_name("pointer", null)}
+      valign={Gtk.Align.CENTER}
+      tooltipText={mute((m) => (m ? "Speaker muted — click to unmute" : "Click to mute speaker"))}
+      onClicked={() => (speaker.mute = !speaker.mute)}
+    >
+      <label class="icon speaker" label={ICONS.speaker[2]} />
+    </button>
+  )
 }
 
 function MicIcon() {
   const mute = createBinding(microphone, "mute")
+  // Click to mute / unmute the microphone
   return (
-    <label class="icon mic" label={mute((m) => (m ? ICONS.micMuted : ICONS.mic))} />
+    <button
+      class={mute((m) => (m ? "audio-toggle muted" : "audio-toggle"))}
+      focusOnClick={false}
+      cursor={Gdk.Cursor.new_from_name("pointer", null)}
+      valign={Gtk.Align.CENTER}
+      tooltipText={mute((m) => (m ? "Mic muted — click to unmute" : "Click to mute mic"))}
+      onClicked={() => (microphone.mute = !microphone.mute)}
+    >
+      <label class="icon mic" label={ICONS.mic} />
+    </button>
   )
 }
 

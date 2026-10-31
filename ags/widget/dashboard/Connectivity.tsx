@@ -2,7 +2,7 @@ import { Gtk } from "ags/gtk4"
 import Pango from "gi://Pango"
 import AstalBluetooth from "gi://AstalBluetooth"
 import { Accessor } from "ags"
-import { createPoll } from "ags/time"
+import { livePoll } from "../../lib/scheduler"
 
 const bluetooth = AstalBluetooth.get_default()
 
@@ -11,8 +11,8 @@ const ICON = {
   btOff: "\u{f00b2}",
 }
 
-// Bluetooth (BlueZ) state, checked once a second
-const bt = createPoll({ available: false, on: false, status: "" }, 1000, () => {
+// Bluetooth (BlueZ) state, checked once a second while the dashboard is open
+const bt = livePoll({ available: false, on: false, status: "" }, 1000, () => {
   const a = bluetooth.adapter
   if (!a) return { available: false, on: false, status: "No Bluetooth adapter" }
   if (!a.powered) return { available: true, on: false, status: "Off" }

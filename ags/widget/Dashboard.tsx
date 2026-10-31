@@ -1,7 +1,7 @@
 import app from "ags/gtk4/app"
 import { Astal, Gtk, Gdk } from "ags/gtk4"
 import { createBinding, createComputed } from "ags"
-import { createPoll } from "ags/time"
+import { livePoll, setDashboardOpen } from "../lib/scheduler"
 import { execAsync } from "ags/process"
 import AstalHyprland from "gi://AstalHyprland"
 import Gauge from "./dashboard/Gauge"
@@ -10,8 +10,15 @@ import AudioRow from "./dashboard/AudioRow"
 import Connectivity from "./dashboard/Connectivity"
 import Launcher, { focusLauncher } from "./dashboard/Launcher"
 import NotificationList from "./dashboard/NotificationList"
-import { time, ampm, date, week, uptime, updates, cpu, memory, disk, temps, gpu } from "../lib/system"
+import Packages from "./dashboard/Packages"
+import Network from "./dashboard/Network"
+import { refreshPackages } from "../lib/packages"
+import { refreshNetwork } from "../lib/network"
+import Tasks from "./dashboard/Tasks"
+import { refreshTasks } from "../lib/tasks"
+import { time, ampm, date, week, uptime, updates, updatesJob, refreshUpdates, cpu, memory, disk, temps, gpu } from "../lib/system"
 import { speaker, microphone, defaultEndpoint } from "../lib/audio"
+import { services } from "../lib/docker"
 import { DASH_ICONS as I, SHORTCUTS, WORKSPACES, LAYOUTS } from "../config"
 
 const hypr = AstalHyprland.get_default()
@@ -46,9 +53,20 @@ function TimeCard() {
       <label class="clock-date" label={date} xalign={0} />
       <box spacing={8} class="chips">
         <label class="chip" label={uptime((u) => `up ${u}`)} />
-        <box class="chip" spacing={6} visible={updates((n) => n >= 0)} tooltipText="Pending pacman updates (checked every 30 min)">
+        <box
+          class={updatesJob.busy((b) => (b ? "chip loading" : "chip"))}
+          spacing={6}
+          visible={createComputed(() => updates() >= 0 || updatesJob.busy())}
+          tooltipText="Pending pacman updates (checked when the dashboard opens, at most every 30 min)"
+        >
           <label class="chip-dot" label="●" />
-          <label label={updates((n) => (n === 0 ? "up to date" : `${n} update${n === 1 ? "" : "s"}`))} />
+          <label
+            label={createComputed(() => {
+              const n = updates()
+              if (updatesJob.busy()) return "checking updates…"
+              return n === 0 ? "up to date" : `${n} update${n === 1 ? "" : "s"}`
+            })}
+          />
         </box>
       </box>
     </box>
@@ -99,19 +117,43 @@ function ShortcutsCard() {
             <label label={s.icon} />
           </button>
         ))}
+        {/* Postgres / Docker: click to start/stop the service; the dot shows its state */}
+        {services.map((svc) => (
+          <button
+            class={createComputed(() => `shortcut service ${svc.state()}${svc.job.busy() ? " checking" : ""}`)}
+            tooltipText={svc.state((d) =>
+              ({
+                unknown: `Checking ${svc.name}…`,
+                running: `${svc.name} running · click to stop`,
+                stopped: `${svc.name} stopped · click to start`,
+                starting: `Starting ${svc.name}…`,
+                stopping: `Stopping ${svc.name}…`,
+              })[d],
+            )}
+            onClicked={() => {
+              hide() // the sudo prompt opens in a floating terminal
+              svc.toggle()
+            }}
+          >
+            <overlay>
+              <label label={svc.icon} />
+              <box $type="overlay" class="service-dot" halign={Gtk.Align.END} valign={Gtk.Align.START} />
+            </overlay>
+          </button>
+        ))}
       </box>
     </box>
   )
 }
 
 // Workspace dots (active = wide pill, hover = window count) + layout switcher
-const workspaceInfo = createPoll(
+const workspaceInfo = livePoll(
   WORKSPACES.map((id) => ({ id, windows: 0 })),
   1000,
   () => WORKSPACES.map((id) => ({ id, windows: hypr.workspaces.find((w) => w.id === id)?.clients?.length ?? 0 })),
 )
 const activeWorkspace = createBinding(hypr, "focusedWorkspace")((w) => w?.id ?? 0)
-const layout = createPoll("", 1000, () => {
+const layout = livePoll("", 1000, () => {
   try {
     return JSON.parse(hypr.message("j/getoption general:layout")).str as string
   } catch {
@@ -166,8 +208,8 @@ function deviceName(kind: "output" | "mic") {
   const hdmi = d.match(/\((HDMI[^)]*)\) \[([^\]]*)\]/)
   return hdmi ? `${hdmi[2]} · ${hdmi[1]}` : d.replace(/ Audio Controller| Digital Stereo| Analog Stereo/g, "")
 }
-const outputName = createPoll("", 3000, () => deviceName("output"))
-const inputName = createPoll("", 3000, () => deviceName("mic"))
+const outputName = livePoll("", 3000, () => deviceName("output"))
+const inputName = livePoll("", 3000, () => deviceName("mic"))
 
 function AudioCard({ title, device, children }: { title: string; device: any; children: JSX.Element }) {
   return (
@@ -198,9 +240,17 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       visible={false}
       $={(self) =>
         self.connect("notify::visible", () => {
+          // Live readings (clock, gauges, workspaces, ...) run only while open
+          setDashboardOpen(self.visible)
           if (!self.visible) return
           resetCalendar()
           focusLauncher()
+          // Queued one at a time, in this order (cheapest / most visible first)
+          services.forEach((svc) => svc.refresh())
+          refreshNetwork()
+          refreshTasks()
+          refreshPackages() // only managers whose count is stale (config.ts)
+          refreshUpdates() // checkupdates, at most every 30 min
         })
       }
     >
@@ -229,6 +279,7 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
             <box orientation={V} spacing={14} widthRequest={260}>
               <TimeCard />
               <Calendar />
+              <Tasks onOpen={hide} />
               <WorkspaceCard />
             </box>
             {/* Middle: system (4 gauges in a row), shortcuts, output, input */}
@@ -239,6 +290,11 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
                 <ShortcutsCard />
                 <Connectivity />
               </box>
+              {/* Package managers + network details (read on open, not polled) */}
+              <box spacing={14} homogeneous>
+                <Packages />
+                <Network />
+              </box>
               <AudioCard title="OUTPUT" device={outputName}>
                 <AudioRow ep={speaker} name="Speaker" icon={I.speaker} iconMuted={I.speakerMuted} />
               </AudioCard>
@@ -246,8 +302,10 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
                 <AudioRow ep={microphone} name="Microphone" icon={I.mic} iconMuted={I.micMuted} />
               </AudioCard>
             </box>
-            {/* Notification history on the right */}
-            <NotificationList />
+            {/* Right: notification history */}
+            <box orientation={V} spacing={14} widthRequest={320} hexpand={false}>
+              <NotificationList />
+            </box>
           </box>
         </box>
       </box>

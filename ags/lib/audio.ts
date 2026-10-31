@@ -16,6 +16,15 @@ export type Kind = "output" | "mic"
 // never re-pointed while running (changing `source` on a live instance
 // crashes). When the device changes, the old one is stopped and a new one
 // is created.
+//
+// To save CPU/GPU, an instance only exists while it has something to show:
+//   output — an app is playing audio (a playback stream is RUNNING) and the
+//            speaker isn't muted
+//   mic    — the microphone isn't muted (a hardware mute on the QuadCast
+//            can't be seen from here; the bars just stay flat then, and the
+//            Visualizer skips redraws while nothing changes)
+// Starting is instant; stopping waits STOP_DELAY_MS so short gaps (track
+// changes, a quick pause) don't tear the instance down and rebuild it.
 const current: Record<Kind, { cava: AstalCava.Cava; source: string } | null> = {
   output: null,
   mic: null,
@@ -62,27 +71,87 @@ function create(kind: Kind, source: string) {
   return cava
 }
 
+const STOP_DELAY_MS = 1500
+
+// Should this visualizer be running right now?
+function wanted(kind: Kind): boolean {
+  if (kind === "mic") return !microphone.mute
+  if (speaker.mute) return false
+  return (wp.audio?.streams ?? []).some((s) => s.state === AstalWp.NodeState.RUNNING)
+}
+
+function stop(kind: Kind) {
+  const c = current[kind]
+  if (!c) return
+  c.cava.active = false
+  current[kind] = null
+  console.log(`[audio] ${kind} visualizer paused`)
+  listeners[kind].forEach((fn) => fn()) // one last redraw: flat bars
+}
+
 const busy: Record<Kind, boolean> = { output: false, mic: false }
+const again: Record<Kind, boolean> = { output: false, mic: false }
 
 async function sync(kind: Kind) {
-  if (busy[kind]) return // a check is already running
+  if (busy[kind]) {
+    again[kind] = true // re-run once the current check finishes
+    return
+  }
   busy[kind] = true
   try {
+    if (!wanted(kind)) return stop(kind)
     const source = await wantedSource(kind)
     if (!source || current[kind]?.source === source) return
-    if (current[kind]) current[kind]!.cava.active = false // stop the old one
+    stop(kind) // device changed: stop the old one
     current[kind] = { cava: create(kind, source), source }
     console.log(`[audio] ${kind} visualizer listening to ${source}`)
   } finally {
     busy[kind] = false
+    if (again[kind]) {
+      again[kind] = false
+      sync(kind)
+    }
   }
+}
+
+// Start right away when wanted; stop after a short delay when not
+const stopTimer: Record<Kind, ReturnType<typeof setTimeout> | null> = { output: null, mic: null }
+function update(kind: Kind) {
+  if (wanted(kind)) {
+    if (stopTimer[kind]) clearTimeout(stopTimer[kind]!)
+    stopTimer[kind] = null
+    sync(kind)
+  } else if (current[kind] && !stopTimer[kind]) {
+    stopTimer[kind] = setTimeout(() => {
+      stopTimer[kind] = null
+      sync(kind)
+    }, STOP_DELAY_MS)
+  }
+}
+
+// Event-driven: playback streams starting/stopping and mute changes
+let hooked = false
+function hook() {
+  const audio = wp.audio
+  if (hooked || !audio) return
+  hooked = true
+  const watch = (s: AstalWp.Stream) => s.connect("notify::state", () => update("output"))
+  audio.streams?.forEach(watch)
+  audio.connect("stream-added", (_a, s) => {
+    watch(s)
+    update("output")
+  })
+  audio.connect("stream-removed", () => update("output"))
+  speaker.connect("notify::mute", () => update("output"))
+  microphone.connect("notify::mute", () => update("mic"))
 }
 
 // Start once WirePlumber is ready, then re-check every 3s so a changed or
 // late-appearing default device is picked up (a no-op when nothing changed).
 function syncAll() {
-  sync("output")
-  sync("mic")
+  hook()
+  update("output")
+  update("mic")
 }
 wp.connect("ready", syncAll)
 setTimeout(syncAll, 500)

@@ -24,21 +24,29 @@ function roundedBar(cr: any, x: number, y: number, w: number, h: number) {
 export default function Visualizer({ kind, bars, level, gain = 1, gate = 0 }: Props) {
   const width = bars * VIS.barWidth + (bars - 1) * VIS.gap
 
+  // Bar heights in px (half-pixel steps), computed per cava frame
+  function compute(): number[] {
+    const values = getValues(kind) // [] while the visualizer is paused
+    const cap = level()
+    const out: number[] = []
+    for (let i = 0; i < bars; i++) {
+      let v = Math.min(1, Math.max(0, (values[i] ?? 0) * gain))
+      if (gate > 0) v = v < gate ? 0 : (v - gate) / (1 - gate)
+      v *= cap
+      out.push(Math.round(Math.max(VIS.minHeight, v * VIS.height) * 2) / 2)
+    }
+    return out
+  }
+
   function setup(area: Gtk.DrawingArea) {
+    let heights = compute()
+
     area.set_draw_func((self, cr, w, h) => {
       const color = self.get_color() // from CSS `color`
       cr.setSourceRGBA(color.red, color.green, color.blue, color.alpha)
 
-      const values = getValues(kind)
-      const cap = level()
       let x = (w - width) / 2
-
-      for (let i = 0; i < bars; i++) {
-        let v = Math.min(1, Math.max(0, (values[i] ?? 0) * gain))
-        if (gate > 0) v = v < gate ? 0 : (v - gate) / (1 - gate)
-        v *= cap
-
-        const bh = Math.max(VIS.minHeight, v * VIS.height)
+      for (const bh of heights) {
         const y = VIS.centered ? (h - bh) / 2 : (h + VIS.height) / 2 - bh
         roundedBar(cr, x, y, VIS.barWidth, bh)
         x += VIS.barWidth + VIS.gap
@@ -47,8 +55,13 @@ export default function Visualizer({ kind, bars, level, gain = 1, gate = 0 }: Pr
       cr.$dispose()
     })
 
-    // Redraw every time cava produces a new frame
-    const off = onFrame(kind, () => area.queue_draw())
+    // Redraw only when a bar actually changed (silence = no redraws at all)
+    const off = onFrame(kind, () => {
+      const next = compute()
+      if (next.every((v, i) => v === heights[i])) return
+      heights = next
+      area.queue_draw()
+    })
     area.connect("destroy", off)
   }
 

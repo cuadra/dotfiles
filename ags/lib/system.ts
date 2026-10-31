@@ -1,10 +1,11 @@
 // System stats for the dashboard, read straight from /proc, /sys and Gio
-// (replaces the eww helper scripts).
+// (replaces the eww helper scripts). Everything here is paused while the
+// dashboard is closed (see lib/scheduler.ts).
 import GLib from "gi://GLib"
 import Gio from "gi://Gio"
-import { createPoll } from "ags/time"
 import { execAsync } from "ags/process"
 import { createState } from "ags"
+import { livePoll, createJob } from "./scheduler"
 
 const decoder = new TextDecoder()
 function read(path: string): string | null {
@@ -21,13 +22,13 @@ const GB = 1024 ** 3
 // ── Clock ────────────────────────────────────────────────────────────
 const now = (fmt: string) => GLib.DateTime.new_now_local().format(fmt) ?? ""
 const clean = (t: string) => t.trim().replace(/\s+/g, " ")
-export const time = createPoll(clean(now("%l:%M")), 1000, () => clean(now("%l:%M"))) // 11:14 (no leading zero)
-export const ampm = createPoll(now("%p"), 1000, () => now("%p"))
-export const date = createPoll(clean(now("%A, %B %e, %Y")), 60_000, () => clean(now("%A, %B %e, %Y")))
-export const week = createPoll(now("%V"), 60_000, () => String(Number(now("%V")))) // ISO week number
+export const time = livePoll(clean(now("%l:%M")), 1000, () => clean(now("%l:%M"))) // 11:14 (no leading zero)
+export const ampm = livePoll(now("%p"), 1000, () => now("%p"))
+export const date = livePoll(clean(now("%A, %B %e, %Y")), 60_000, () => clean(now("%A, %B %e, %Y")))
+export const week = livePoll(String(Number(now("%V"))), 60_000, () => String(Number(now("%V")))) // ISO week number
 
 // "4d 2h", or "35m" right after boot
-export const uptime = createPoll("", 60_000, () => {
+export const uptime = livePoll("", 60_000, () => {
   const secs = Math.floor(Number(read("/proc/uptime")?.split(" ")[0] ?? 0))
   const d = Math.floor(secs / 86400)
   const h = Math.floor((secs % 86400) / 3600)
@@ -38,31 +39,46 @@ export const uptime = createPoll("", 60_000, () => {
 })
 
 // Pending Arch updates (needs pacman-contrib for checkupdates). -1 = couldn't check.
+// checkupdates downloads the sync databases, so it only runs when the
+// dashboard opens and the last check is older than UPDATES_STALE_MIN.
+const UPDATES_STALE_MIN = 30
 const [updates, setUpdates] = createState(-1)
 export { updates }
-function checkUpdates() {
+let updatesCheckedAt = 0
+export const updatesJob = createJob(() =>
   execAsync(["bash", "-c", "command -v checkupdates >/dev/null || exit 9; checkupdates 2>/dev/null | wc -l"])
     .then((out) => setUpdates(Number(out.trim())))
     .catch(() => setUpdates(-1))
+    .finally(() => (updatesCheckedAt = Date.now())),
+)
+export function refreshUpdates(force = false) {
+  if (force || Date.now() - updatesCheckedAt > UPDATES_STALE_MIN * 60_000) updatesJob.schedule({ manual: force })
 }
-checkUpdates()
-setInterval(checkUpdates, 30 * 60_000) // every 30 minutes
 
 // ── CPU ──────────────────────────────────────────────────────────────
 export const threads = GLib.get_num_processors()
 let prev = { idle: 0, total: 0 }
-export const cpu = createPoll(0, 2000, () => {
+function cpuSample() {
   const nums = (read("/proc/stat")?.split("\n")[0] ?? "").trim().split(/\s+/).slice(1).map(Number)
-  const idle = (nums[3] ?? 0) + (nums[4] ?? 0)
-  const total = nums.reduce((a, b) => a + b, 0)
-  const dIdle = idle - prev.idle
-  const dTotal = total - prev.total
-  prev = { idle, total }
-  return dTotal > 0 ? (1 - dIdle / dTotal) * 100 : 0
-})
+  return { idle: (nums[3] ?? 0) + (nums[4] ?? 0), total: nums.reduce((a, b) => a + b, 0) }
+}
+export const cpu = livePoll(
+  0,
+  2000,
+  () => {
+    const cur = cpuSample()
+    const dIdle = cur.idle - prev.idle
+    const dTotal = cur.total - prev.total
+    prev = cur
+    return dTotal > 0 ? (1 - dIdle / dTotal) * 100 : 0
+  },
+  // Fresh baseline on open (otherwise the first reading would be the
+  // average over the whole time the dashboard was closed); first value 0.5s later
+  { onOpen: () => (prev = cpuSample()), firstDelay: 500 },
+)
 
 // ── Memory ───────────────────────────────────────────────────────────
-export const memory = createPoll({ percent: 0, used: 0, total: 0 }, 2000, () => {
+export const memory = livePoll({ percent: 0, used: 0, total: 0 }, 2000, () => {
   const info = read("/proc/meminfo") ?? ""
   const kb = (key: string) => Number(info.match(new RegExp(`^${key}:\\s+(\\d+)`, "m"))?.[1] ?? 0)
   const total = kb("MemTotal") * 1024
@@ -71,7 +87,7 @@ export const memory = createPoll({ percent: 0, used: 0, total: 0 }, 2000, () => 
 })
 
 // ── Disk (/) ─────────────────────────────────────────────────────────
-export const disk = createPoll({ percent: 0, free: 0 }, 15_000, () => {
+export const disk = livePoll({ percent: 0, free: 0 }, 15_000, () => {
   try {
     const info = Gio.File.new_for_path("/").query_filesystem_info("filesystem::size,filesystem::free", null)
     const size = info.get_attribute_uint64("filesystem::size")
@@ -104,7 +120,7 @@ const pick = (t: Record<string, number>, names: string[]) =>
   names.map((n) => t[n]).find((v) => v !== undefined) ?? null
 
 type Temps = { cpu: number | null; gpu: number | null; memory: number | null; nvme: number | null }
-export const temps = createPoll<Temps>({ cpu: null, gpu: null, memory: null, nvme: null }, 3000, () => {
+export const temps = livePoll<Temps>({ cpu: null, gpu: null, memory: null, nvme: null }, 3000, () => {
   const t = sensorTemps()
   return {
     cpu: pick(t, ["k10temp", "zenpower", "coretemp"]),
@@ -134,7 +150,7 @@ function gpuDevice(): string | null {
 }
 const gpuDev = gpuDevice()
 
-export const gpu = createPoll({ percent: 0, vramUsed: 0, vramTotal: 0 }, 2000, () => {
+export const gpu = livePoll({ percent: 0, vramUsed: 0, vramTotal: 0 }, 2000, () => {
   if (!gpuDev) return { percent: 0, vramUsed: 0, vramTotal: 0 }
   return {
     percent: Number(read(`${gpuDev}/gpu_busy_percent`) ?? 0),
