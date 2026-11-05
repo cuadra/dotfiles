@@ -4,6 +4,7 @@ import GLib from "gi://GLib"
 import AstalNotifd from "gi://AstalNotifd"
 import { createBinding, For } from "ags"
 import { livePoll } from "../../lib/scheduler"
+import { TEAMS } from "../../config"
 
 const notifd = AstalNotifd.get_default()
 const notifications = createBinding(notifd, "notifications")
@@ -18,8 +19,16 @@ function ago(time: number, nowSecs: number) {
   return `${Math.floor(s / 86400)}d`
 }
 
+// Teams (via Zen): see TEAMS in config.ts
+function isTeams(n: AstalNotifd.Notification) {
+  const app = [n.appName, n.desktopEntry, n.appIcon].join(" ")
+  if (!TEAMS.browser.test(app)) return false
+  return TEAMS.allFromBrowser || TEAMS.match.test([n.appName, n.desktopEntry, n.summary, n.body].join(" "))
+}
+
 // App icon if the theme has one, else the notification's image, else a letter tile
 function NotifIcon({ n }: { n: AstalNotifd.Notification }) {
+  if (isTeams(n)) return <label class="notif-icon teams" label={TEAMS.icon} />
   const theme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default()!)
   const names = [n.appIcon, n.desktopEntry, n.appName?.toLowerCase()].filter((x): x is string => !!x)
   const iconName = names.find((name) => theme.has_icon(name))
@@ -32,13 +41,13 @@ function NotifIcon({ n }: { n: AstalNotifd.Notification }) {
 
 function NotificationItem({ n }: { n: AstalNotifd.Notification }) {
   return (
-    <box class="notif-item" spacing={12}>
+    <box class={isTeams(n) ? "notif-item teams" : "notif-item"} spacing={12}>
       <box valign={Gtk.Align.START}>
         <NotifIcon n={n} />
       </box>
       <box orientation={Gtk.Orientation.VERTICAL} hexpand spacing={2}>
         <box>
-          <label class="notif-app" label={n.appName || "Notification"} hexpand xalign={0} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={20} />
+          <label class="notif-app" label={isTeams(n) ? "Microsoft Teams" : n.appName || "Notification"} hexpand xalign={0} ellipsize={Pango.EllipsizeMode.END} maxWidthChars={20} />
           <label class="notif-time" label={now((t) => ago(n.time, t))} />
           <button class="notif-dismiss" tooltipText="Dismiss" onClicked={() => n.dismiss()}>
             <label label={""} />

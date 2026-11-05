@@ -15,7 +15,13 @@ import Network from "./dashboard/Network"
 import { refreshPackages } from "../lib/packages"
 import { refreshNetwork } from "../lib/network"
 import Tasks from "./dashboard/Tasks"
+import Wallpaper from "./dashboard/Wallpaper"
+import { refreshWallpaper } from "../lib/wallpaper"
 import { refreshTasks } from "../lib/tasks"
+import Weather from "./dashboard/Weather"
+import Fans from "./dashboard/Fans"
+import Camera from "./dashboard/Camera"
+import { refreshWeather } from "../lib/weather"
 import { time, ampm, date, week, uptime, updates, updatesJob, refreshUpdates, cpu, memory, disk, temps, gpu } from "../lib/system"
 import { speaker, microphone, defaultEndpoint } from "../lib/audio"
 import { services } from "../lib/docker"
@@ -161,7 +167,7 @@ const layout = livePoll("", 1000, () => {
   }
 })
 function setLayout(name: string) {
-  hypr.message(`keyword general:layout ${name}`)
+  hypr.message(`eval hl.config({ general = { layout = "${name}" } })`) // Lua config: no "keyword" request
   execAsync(["notify-send", "-a", "Hyprland", `Layout: ${name}`]) // same popup as Super+Tab
 }
 
@@ -181,7 +187,7 @@ function WorkspaceCard() {
               class={cls}
               valign={Gtk.Align.CENTER}
               tooltipText={n((c) => `Workspace ${id} · ${c} window${c === 1 ? "" : "s"}`)}
-              onClicked={() => hypr.dispatch("workspace", String(id))}
+              onClicked={() => hypr.message(`dispatch hl.dsp.focus({ workspace = ${id} })`)}
             />
           )
         })}
@@ -245,10 +251,12 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
           if (!self.visible) return
           resetCalendar()
           focusLauncher()
+          refreshWallpaper() // reads hyprpaper.conf; thumbnail only re-decoded if it changed
           // Queued one at a time, in this order (cheapest / most visible first)
           services.forEach((svc) => svc.refresh())
           refreshNetwork()
           refreshTasks()
+          refreshWeather() // Open-Meteo, at most every 30 min (config.ts)
           refreshPackages() // only managers whose count is stale (config.ts)
           refreshUpdates() // checkupdates, at most every 30 min
         })
@@ -275,16 +283,19 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
           {/* App launcher across the top */}
           <Launcher onLaunch={hide} />
           <box spacing={14}>
-            {/* Left: time, calendar, then workspaces + layouts (no card) */}
+            {/* Left: time, calendar, workspaces + layouts (no card), camera, wallpaper */}
             <box orientation={V} spacing={14} widthRequest={260}>
               <TimeCard />
               <Calendar />
               <Tasks onOpen={hide} />
               <WorkspaceCard />
+              <Camera />
+              <Wallpaper onOpen={hide} />
             </box>
             {/* Middle: system (4 gauges in a row), shortcuts, output, input */}
             <box orientation={V} spacing={14} hexpand>
               <SystemCard />
+              <Fans />
               {/* Shortcuts with the Bluetooth toggle beside it */}
               <box spacing={14} homogeneous>
                 <ShortcutsCard />
@@ -307,6 +318,8 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
               <NotificationList />
             </box>
           </box>
+          {/* 7-day forecast across the bottom */}
+          <Weather />
         </box>
       </box>
     </window>

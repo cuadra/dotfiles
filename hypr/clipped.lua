@@ -61,7 +61,7 @@ if paste then
   -- still-held SUPER key can't turn this into a different shortcut.
   pipe_to("wl-copy", text)
   -- hyprctl exits 0 even on failure, so check what it printed.
-  local h = io.popen("hyprctl dispatch sendshortcut 'CTRL SHIFT, V, activewindow'")
+  local h = io.popen([[hyprctl dispatch 'hl.dsp.send_shortcut({ mods = "CTRL SHIFT", key = "V", window = "activewindow" })']])
   local result = h and h:read("a") or ""
   if h then h:close() end
   if not result:match("^ok") then

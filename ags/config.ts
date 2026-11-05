@@ -146,6 +146,44 @@ export const PACKAGES = {
   ] as { name: string; icon: string; when: string; count: string; tooltip?: string }[],
 }
 
+// Weather row (bottom of the dashboard), from Open-Meteo: free, no API key.
+// Fetched when the dashboard opens, only if older than refreshMinutes
+// (or on a new day, or when you click the refresh icon on the card).
+// Find coordinates for another place at https://open-meteo.com/en/docs
+export const WEATHER = {
+  place: "Cary, NC", // label in the card header only
+  latitude: 35.7915,
+  longitude: -78.7811,
+  unit: "F" as "F" | "C",
+  refreshMinutes: 30,
+}
+
+// Fan speeds (middle column, under System). Read from the motherboard's
+// sensor chip (it87 driver from the AUR: it87-dkms-git), every pollMs while
+// the dashboard is open. `index` is the N in /sys/class/hwmon/*/fanN_input.
+// A fan reading 0 RPM is shown as "Stopped".
+export const FANS = {
+  board: "Motherboard", // placeholder: shown in the card header
+  chip: "it8689", // start of the hwmon sensor name
+  pollMs: 3000,
+  fans: [
+    { index: 1, name: "Case fan 1" },
+    { index: 2, name: "Case fan 2" },
+    { index: 3, name: "Case fan 3" },
+  ],
+}
+
+// Webcam preview (left column, above the wallpaper). The camera only runs
+// while the dashboard is open. Find your device with: v4l2-ctl --list-devices
+// (use the first /dev/videoN listed under your webcam).
+export const CAMERA = {
+  enabled: true,
+  device: "/dev/video0",
+  height: 146, // preview height in px (16:9 at the left column's width)
+  maxWidth: 640, // capture size cap; the preview is small, so this saves CPU
+  mirror: true, // flip horizontally, like a mirror
+}
+
 // ── Notifications ────────────────────────────────────────────────────
 export const NOTIFY = {
   width: 500,
@@ -156,4 +194,13 @@ export const NOTIFY = {
   hyprTimeout: 1500, // ms, workspace popups
   // critical notifications stay until dismissed
   closeIcon: "",
+}
+
+// Teams notifications (Teams runs in Zen) get their own icon and highlight
+// in the dashboard list. See isTeams() in widget/dashboard/NotificationList.tsx
+export const TEAMS = {
+  browser: /zen/i, // notification comes from this app (name, desktop entry or icon)
+  match: /teams/i, // …and mentions this (app name, desktop entry, summary or body)
+  allFromBrowser: false, // true = treat every notification from the browser as Teams
+  icon: "\u{f02bb}",
 }
